@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://j0wjd86t7k0h"]
+
+[ext_resource type="Script" path="res://PlayerShip.cs" id="1_fbwsa"]
+[ext_resource type="Texture2D" uid="uid://oyvqdy0x2c4x" path="res://assets/Starfighter.png" id="1_q50qq"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fo3fr"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rnv2w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_q50qq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wln5y"]
+radius = 12.6126
+height = 36.036
+
+[node name="Player" type="Area2D"]
+scale = Vector2(5, 5)
+script = ExtResource("1_fbwsa")
+
+[node name="PlayerShip" type="AnimatedSprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_fo3fr")
+scale = Vector2(0.555, 0.555)
+sprite_frames = SubResource("SpriteFrames_rnv2w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.555, 0.555)
+shape = SubResource("CapsuleShape2D_wln5y")

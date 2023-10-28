@@ -13,6 +13,8 @@ public partial class PlayerShip : Area2D
 	
 	private Vector2 _velocity = Vector2.Zero;
 	
+	private bool _isEngineSoundPlaying = false;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -23,6 +25,7 @@ public partial class PlayerShip : Area2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		// Movement
 		var rotation = Rotation;
 
 		if (Input.IsActionPressed("turn_left"))
@@ -50,5 +53,25 @@ public partial class PlayerShip : Area2D
 		var newY = (float)(Position.Y + _velocity.Y * delta + ScreenSize.Y) % ScreenSize.Y;
 		var newPosition = new Vector2(newX, newY);
 		Position = newPosition;
+		
+		// Sound
+		if (Input.IsActionPressed("turn_left")
+			|| Input.IsActionPressed("turn_right")
+			|| Input.IsActionPressed("thrust_forward"))
+		{
+			if (!_isEngineSoundPlaying)
+			{
+				_isEngineSoundPlaying = true;
+				GetNode<AudioStreamPlayer>("EngineSound").Play();
+			}
+		}
+		else
+		{
+			if (_isEngineSoundPlaying)
+			{
+				_isEngineSoundPlaying = false;
+				GetNode<AudioStreamPlayer>("EngineSound").Stop();
+			}			
+		}
 	}
 }

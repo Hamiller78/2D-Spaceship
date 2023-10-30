@@ -13,7 +13,7 @@ public partial class PlayerShip : Area2D
 	
 	private Vector2 _velocity = Vector2.Zero;
 	
-	private bool _isEngineSoundPlaying = false;
+	private bool _isEngineRunning = false;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -59,18 +59,20 @@ public partial class PlayerShip : Area2D
 			|| Input.IsActionPressed("turn_right")
 			|| Input.IsActionPressed("thrust_forward"))
 		{
-			if (!_isEngineSoundPlaying)
+			if (!_isEngineRunning)
 			{
-				_isEngineSoundPlaying = true;
+				_isEngineRunning = true;
 				GetNode<AudioStreamPlayer>("EngineSound").Play();
+				GetNode<AnimatedSprite2D>("PlayerShip/EngineFlame").Visible = true;		
 			}
 		}
 		else
 		{
-			if (_isEngineSoundPlaying)
+			if (_isEngineRunning)
 			{
-				_isEngineSoundPlaying = false;
+				_isEngineRunning = false;
 				GetNode<AudioStreamPlayer>("EngineSound").Stop();
+				GetNode<AnimatedSprite2D>("PlayerShip/EngineFlame").Visible = false;
 			}			
 		}
 	}

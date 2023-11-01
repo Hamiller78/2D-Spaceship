@@ -23,6 +23,6 @@ public partial class LaserShot : Area2D
 		{
 			QueueFree();
 		}
-		this.Position += new Vector2(0f, 3f);
+		Position += new Vector2(0f, 3f);
 	}
 }

@@ -23,7 +23,10 @@ public partial class Main : Node
 	private void FirePrimary()
 	{
 		var newShot = LaserShotScene.Instantiate<LaserShot>();
-		newShot.Position = new Vector2(1000f, 0f);
+		// newShot.Position = new Vector2(1000f, 0f);
+		newShot.Position = GetNode<PlayerShip>("Player").Position;
+		newShot.Rotation = GetNode<PlayerShip>("Player").Rotation;
+		
 		AddChild(newShot);
 	}
 

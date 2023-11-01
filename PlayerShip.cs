@@ -10,9 +10,9 @@ public partial class PlayerShip : Area2D
 	public float RadsPerSecond { get; set; } = 2f * (float)Math.PI * 0.4f;
 	
 	public Vector2 ScreenSize;
-	
+
 	private Vector2 _velocity = Vector2.Zero;
-	
+
 	private bool _isEngineRunning = false;
 	
 	// Called when the node enters the scene tree for the first time.
@@ -20,6 +20,7 @@ public partial class PlayerShip : Area2D
 	{
 		ScreenSize = GetViewportRect().Size;
 		Position = new Vector2(ScreenSize.X / 2, ScreenSize.Y / 2);
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,7 +33,6 @@ public partial class PlayerShip : Area2D
 		{
 			Rotation -= RadsPerSecond * (float)delta;
 			Rotation = Rotation % (float)(2d * Math.PI);
-			GD.Print(Rotation);
 		}
 
 		if (Input.IsActionPressed("turn_right"))
@@ -46,7 +46,6 @@ public partial class PlayerShip : Area2D
 			var vx = (float)(_velocity.X + Math.Cos(Rotation - Math.PI / 2d) * Acceleration * delta);
 			var vy = (float)(_velocity.Y + Math.Sin(Rotation - Math.PI / 2d) * Acceleration * delta);
 			_velocity = new Vector2(vx, vy);
-			GD.Print(vy);
 		}
 			
 		var newX = (float)(Position.X + _velocity.X * delta + ScreenSize.X) % ScreenSize.X;

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bcel305wto7q2"]
+
+[ext_resource type="Script" path="res://LaserShot.cs" id="1_3unxk"]
+[ext_resource type="Texture2D" uid="uid://dyrh5t8a6stqi" path="res://assets/01.png" id="1_hhpci"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1hed1"]
+radius = 3.16228
+
+[node name="Lasershot" type="Area2D"]
+collision_mask = 0
+script = ExtResource("1_3unxk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1hed1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = -1.5708
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_hhpci")

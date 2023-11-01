@@ -12,6 +12,7 @@ public partial class LaserShot : Area2D
 	public override void _Ready()
 	{
 		_remainingLifetime = LifetimeInSeconds;
+		GetNode<AudioStreamPlayer>("LaserSound").Play();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

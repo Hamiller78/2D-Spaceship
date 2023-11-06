@@ -20,7 +20,6 @@ public partial class PlayerShip : Area2D
 	{
 		ScreenSize = GetViewportRect().Size;
 		Position = new Vector2(ScreenSize.X / 2, ScreenSize.Y / 2);
-
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -6,8 +6,11 @@ public partial class LaserShot : Area2D
 	[Export]
 	public double LifetimeInSeconds { get; set; } = 1.5d;
 
+	public float Speed { get; set; } = 400f;
+
+	public Vector2 Velocity { get; set; }
+
 	private double _remainingLifetime;
-	private float _speed = 400f;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -23,9 +26,8 @@ public partial class LaserShot : Area2D
 		if (_remainingLifetime <= 0d)
 		{
 			QueueFree();
+			return;
 		}
-		Position += new Vector2(
-			(float)Math.Cos(Rotation - Math.PI / 2d) * _speed * (float)delta,
-			(float)Math.Sin(Rotation - Math.PI / 2d) * _speed * (float)delta);
+		Position += Velocity * (float)delta;
 	}
 }

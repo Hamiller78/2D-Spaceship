@@ -11,6 +11,11 @@ public partial class PlayerShip : Area2D
 	
 	public Vector2 ScreenSize;
 
+	public Vector2 Velocity
+	{
+		get => _velocity;
+	}
+
 	private Vector2 _velocity = Vector2.Zero;
 
 	private bool _isEngineRunning = false;

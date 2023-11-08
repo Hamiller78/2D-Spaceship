@@ -23,11 +23,13 @@ public partial class Main : Node
 	private void FirePrimary()
 	{
 		var newShot = LaserShotScene.Instantiate<LaserShot>();
-		// newShot.Position = new Vector2(1000f, 0f);
 		newShot.Position = GetNode<PlayerShip>("Player").Position;
 		newShot.Rotation = GetNode<PlayerShip>("Player").Rotation;
-		
+		newShot.Velocity = GetNode<PlayerShip>("Player").Velocity
+			+ new Vector2(
+			  	(float)Math.Cos(newShot.Rotation - Math.PI / 2d) * newShot.Speed,
+				(float)Math.Sin(newShot.Rotation - Math.PI / 2d) * newShot.Speed
+			);
 		AddChild(newShot);
 	}
-
 }

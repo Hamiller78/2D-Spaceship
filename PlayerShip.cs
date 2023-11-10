@@ -9,6 +9,9 @@ public partial class PlayerShip : Area2D
 	[Export]
 	public float RadsPerSecond { get; set; } = 2f * (float)Math.PI * 0.4f;
 	
+	[Export]
+	public PackedScene LaserShotScene { get; set; }
+
 	public Vector2 ScreenSize;
 
 	public Vector2 Velocity
@@ -78,5 +81,24 @@ public partial class PlayerShip : Area2D
 				GetNode<AnimatedSprite2D>("PlayerShip/EngineFlame").Visible = false;
 			}			
 		}
+
+		// Functions
+		if (Input.IsActionJustPressed("fire_primary"))
+		{
+			FirePrimary();
+		}
 	}
+
+	private void FirePrimary()
+	{
+		var newShot = LaserShotScene.Instantiate<LaserShot>();
+		newShot.Position = Position;
+		newShot.Rotation = Rotation;
+		newShot.Velocity = Velocity
+			+ new Vector2(
+			  	(float)Math.Cos(newShot.Rotation - Math.PI / 2d) * newShot.Speed,
+				(float)Math.Sin(newShot.Rotation - Math.PI / 2d) * newShot.Speed
+			);
+		GetParent().AddChild(newShot);
+	}	
 }

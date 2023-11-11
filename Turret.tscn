@@ -19,3 +19,6 @@ shape = SubResource("CircleShape2D_pyual")
 position = Vector2(0, -23)
 texture = ExtResource("1_sbwb7")
 flip_v = true
+
+[connection signal="area_entered" from="." to="." method="OnAreaEntered"]
+[connection signal="body_entered" from="." to="." method="OnBodyEntered"]

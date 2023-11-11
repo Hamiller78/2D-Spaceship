@@ -50,6 +50,21 @@ public partial class Turret : Area2D
 		_targetRotation = (float)(Math.Atan2(position.Y - Position.Y, position.X - Position.X) + Math.PI / 2d);
 	}
 
+	public void OnAreaEntered(Area2D area)
+	{
+		if (area is LaserShot)
+		{
+			GD.Print("Turret hit!");
+			QueueFree();
+		}
+	}
+
+	public void OnBodyEntered(Node2D _)
+	{
+		GD.Print("Turret hit!");
+		QueueFree();
+	}
+
 	private void TurnTurret(double delta)
 	{
 		var rotationDelta = _targetRotation - Rotation;
@@ -61,7 +76,6 @@ public partial class Turret : Area2D
 		{
 			rotationDelta -= (float)(2d * Math.PI);
 		}
-		GD.Print($"Rotation: {Rotation}, Target: {_targetRotation}, Delta: {rotationDelta}");
 		var rotationStep = TurnRate * (float)delta;
 
 		if (Math.Abs(rotationDelta) <= rotationStep)
@@ -82,7 +96,11 @@ public partial class Turret : Area2D
 		}
 
 		var newShot = LaserShotScene.Instantiate<LaserShot>();
-		newShot.Position = Position;
+		newShot.Position
+			= Position
+				+ new Vector2(
+					90f * (float)Math.Cos(Rotation - Math.PI / 2d),
+					90f * (float)Math.Sin(Rotation - Math.PI / 2d));
 		newShot.Rotation = Rotation;
 		newShot.Velocity =
 			new Vector2(

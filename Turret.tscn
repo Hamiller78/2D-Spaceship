@@ -1,13 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://cgn78y5nwvusl"]
+[gd_scene load_steps=5 format=3 uid="uid://cgn78y5nwvusl"]
 
 [ext_resource type="Script" path="res://Turret.cs" id="1_3lyxr"]
 [ext_resource type="Texture2D" uid="uid://eqjyrl45vjg1" path="res://assets/Turret01.png" id="1_sbwb7"]
+[ext_resource type="PackedScene" uid="uid://bcel305wto7q2" path="res://LaserShot.tscn" id="2_wnmvr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pyual"]
 radius = 40.6079
 
 [node name="Turret" type="Area2D"]
 script = ExtResource("1_3lyxr")
+LaserShotScene = ExtResource("2_wnmvr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -1)

@@ -4,13 +4,16 @@ using System;
 public partial class PlayerShip : Area2D
 {
 	[Export]
-	public float Acceleration { get; set; } = 200f; // How fast the player will move (pixels/sec).
+	public float Acceleration { get; set; } = 200f;
 	
 	[Export]
 	public float RadsPerSecond { get; set; } = 2f * (float)Math.PI * 0.4f;
 	
 	[Export]
 	public PackedScene LaserShotScene { get; set; }
+
+    [Signal]
+    public delegate void PositionUpdatedEventHandler(Vector2 position);
 
 	public Vector2 ScreenSize;
 
@@ -59,6 +62,7 @@ public partial class PlayerShip : Area2D
 		var newY = (float)(Position.Y + _velocity.Y * delta + ScreenSize.Y) % ScreenSize.Y;
 		var newPosition = new Vector2(newX, newY);
 		Position = newPosition;
+		EmitSignal(SignalName.PositionUpdated, newPosition);
 		
 		// Sound
 		if (Input.IsActionPressed("turn_left")

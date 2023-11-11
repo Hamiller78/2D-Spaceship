@@ -4,30 +4,26 @@ using System;
 public partial class Main : Node
 {
 	[Export]
-	public PackedScene LaserShotScene { get; set; }
+	public PackedScene TurretScene { get; set; }
 
 	public PackedScene MainScene { get; set; }
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		var screenSize = GetNode<Area2D>("Player").GetViewportRect().Size;
+		var turret = TurretScene.Instantiate<Turret>();
+		turret.Position = new Vector2(GD.Randi() % screenSize.X, GD.Randi() % screenSize.Y);
+		
+		var playerShip = GetNode<PlayerShip>("Player");
+		playerShip.Connect(nameof(PlayerShip.PositionUpdated), new Callable(turret, nameof(Turret.OnTargetPositionUpdated)));
+
+		AddChild(turret);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-	}
-
-	private void FirePrimary()
-	{
-		var newShot = LaserShotScene.Instantiate<LaserShot>();
-		newShot.Position = GetNode<PlayerShip>("Player").Position;
-		newShot.Rotation = GetNode<PlayerShip>("Player").Rotation;
-		newShot.Velocity = GetNode<PlayerShip>("Player").Velocity
-			+ new Vector2(
-			  	(float)Math.Cos(newShot.Rotation - Math.PI / 2d) * newShot.Speed,
-				(float)Math.Sin(newShot.Rotation - Math.PI / 2d) * newShot.Speed
-			);
-		AddChild(newShot);
 	}
 }

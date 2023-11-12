@@ -59,12 +59,6 @@ public partial class Turret : Area2D
 		}
 	}
 
-	public void OnBodyEntered(Node2D _)
-	{
-		GD.Print("Turret hit!");
-		QueueFree();
-	}
-
 	private void TurnTurret(double delta)
 	{
 		var rotationDelta = _targetRotation - Rotation;

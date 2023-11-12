@@ -116,3 +116,5 @@ shape = SubResource("CapsuleShape2D_wln5y")
 
 [node name="EngineSound" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamMP3_38st3")
+
+[connection signal="area_entered" from="." to="." method="OnAreaEntered"]

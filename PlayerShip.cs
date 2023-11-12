@@ -93,10 +93,23 @@ public partial class PlayerShip : Area2D
 		}
 	}
 
+	public void OnAreaEntered(Area2D area)
+	{
+		if (area is LaserShot)
+		{
+			GD.Print("Ship hit!");
+			QueueFree();
+		}
+	}
+
 	private void FirePrimary()
 	{
 		var newShot = LaserShotScene.Instantiate<LaserShot>();
-		newShot.Position = Position;
+		newShot.Position
+			= Position
+				+ new Vector2(
+					70f * (float)Math.Cos(Rotation - Math.PI / 2d),
+					70f * (float)Math.Sin(Rotation - Math.PI / 2d));;
 		newShot.Rotation = Rotation;
 		newShot.Velocity = Velocity
 			+ new Vector2(

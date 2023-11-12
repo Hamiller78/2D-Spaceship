@@ -12,4 +12,7 @@ ExplosionScene = ExtResource("3_alw6m")
 
 [node name="Player" parent="." instance=ExtResource("3_lju8q")]
 
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.3, 0.3)
+
 [connection signal="PlayerShipDestroyed" from="Player" to="." method="OnPlayerShipDestroyed"]

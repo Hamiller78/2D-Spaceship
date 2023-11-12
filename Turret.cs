@@ -10,8 +10,8 @@ public partial class Turret : Area2D
 	public delegate void TurretDestroyedEventHandler(Turret turret);
 
 	public float TurnRate { get; set; } = 2f * (float)Math.PI * 0.2f;
-	public float FireRange { get; set; } = 300f;
-	public float ViewRange { get; set; } = 600f;
+	public float FireRange { get; set; } = 600f;
+	public float ViewRange { get; set; } = 800f;
 	public float RechargeTime { get; set; } = 0.5f;
 	private Vector2 _targetPosition;
 	private float _targetRotation;

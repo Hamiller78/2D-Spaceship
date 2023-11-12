@@ -33,7 +33,7 @@ public partial class PlayerShip : Area2D
 	public override void _Ready()
 	{
 		ScreenSize = GetViewportRect().Size;
-		Position = new Vector2(ScreenSize.X / 2, ScreenSize.Y / 2);
+		Position = new Vector2(ScreenSize.X, ScreenSize.Y);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -61,8 +61,12 @@ public partial class PlayerShip : Area2D
 			_velocity = new Vector2(vx, vy);
 		}
 			
-		var newX = (float)(Position.X + _velocity.X * delta + ScreenSize.X) % ScreenSize.X;
-		var newY = (float)(Position.Y + _velocity.Y * delta + ScreenSize.Y) % ScreenSize.Y;
+		// var newX = (float)(Position.X + _velocity.X * delta + 2f * ScreenSize.X) % (ScreenSize.X * 2f);
+		// var newY = (float)(Position.Y + _velocity.Y * delta + 2f * ScreenSize.Y) % (ScreenSize.Y * 2f);
+
+		var newX = (float)(Position.X + _velocity.X * delta);
+		var newY = (float)(Position.Y + _velocity.Y * delta);
+
 		var newPosition = new Vector2(newX, newY);
 		Position = newPosition;
 		EmitSignal(SignalName.PositionUpdated, newPosition);

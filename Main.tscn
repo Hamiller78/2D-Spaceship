@@ -11,3 +11,5 @@ TurretScene = ExtResource("2_wb2o4")
 ExplosionScene = ExtResource("3_alw6m")
 
 [node name="Player" parent="." instance=ExtResource("3_lju8q")]
+
+[connection signal="PlayerShipDestroyed" from="Player" to="." method="OnPlayerShipDestroyed"]

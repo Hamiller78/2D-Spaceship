@@ -15,6 +15,9 @@ public partial class PlayerShip : Area2D
     [Signal]
     public delegate void PositionUpdatedEventHandler(Vector2 position);
 
+	[Signal]
+	public delegate void PlayerShipDestroyedEventHandler(PlayerShip playerShip);
+
 	public Vector2 ScreenSize;
 
 	public Vector2 Velocity
@@ -97,7 +100,7 @@ public partial class PlayerShip : Area2D
 	{
 		if (area is LaserShot)
 		{
-			GD.Print("Ship hit!");
+			EmitSignal(SignalName.PlayerShipDestroyed, this);
 			QueueFree();
 		}
 	}

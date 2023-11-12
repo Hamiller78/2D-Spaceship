@@ -6,6 +6,9 @@ public partial class Turret : Area2D
 	[Export]
 	public PackedScene LaserShotScene { get; set; }
 
+	[Signal]
+	public delegate void TurretDestroyedEventHandler(Turret turret);
+
 	public float TurnRate { get; set; } = 2f * (float)Math.PI * 0.2f;
 	public float FireRange { get; set; } = 300f;
 	public float ViewRange { get; set; } = 600f;
@@ -14,13 +17,11 @@ public partial class Turret : Area2D
 	private float _targetRotation;
 	private float _rechargeTimeRemaining = 0f;
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_rechargeTimeRemaining = RechargeTime;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		if (_rechargeTimeRemaining > 0f)
@@ -54,7 +55,7 @@ public partial class Turret : Area2D
 	{
 		if (area is LaserShot)
 		{
-			GD.Print("Turret hit!");
+			EmitSignal(SignalName.TurretDestroyed, this);
 			QueueFree();
 		}
 	}

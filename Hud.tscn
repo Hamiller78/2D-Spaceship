@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cp8h11i0ghiei"]
+
+[ext_resource type="Script" path="res://Hud.cs" id="1_rb17q"]
+
+[sub_resource type="SystemFont" id="SystemFont_ng8g1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_bf316"]
+font = SubResource("SystemFont_ng8g1")
+font_size = 32
+
+[node name="Hud" type="CanvasLayer"]
+script = ExtResource("1_rb17q")
+
+[node name="DebugLabel" type="Label" parent="."]
+offset_right = 497.0
+offset_bottom = 75.0
+text = "Score: 0"
+label_settings = SubResource("LabelSettings_bf316")

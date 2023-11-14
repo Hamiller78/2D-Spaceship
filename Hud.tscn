@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Hud.cs" id="1_rb17q"]
 
 [sub_resource type="SystemFont" id="SystemFont_ng8g1"]
+subpixel_positioning = 0
 
 [sub_resource type="LabelSettings" id="LabelSettings_bf316"]
 font = SubResource("SystemFont_ng8g1")

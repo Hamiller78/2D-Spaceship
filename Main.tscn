@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://cv4u223cgjpgp"]
+[gd_scene load_steps=7 format=3 uid="uid://cv4u223cgjpgp"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_r0gi0"]
 [ext_resource type="PackedScene" uid="uid://cgn78y5nwvusl" path="res://Turret.tscn" id="2_wb2o4"]
 [ext_resource type="PackedScene" uid="uid://bi4wfmxjyw83f" path="res://Explosion.tscn" id="3_alw6m"]
 [ext_resource type="PackedScene" uid="uid://j0wjd86t7k0h" path="res://PlayerShip.tscn" id="3_lju8q"]
 [ext_resource type="PackedScene" uid="uid://cp8h11i0ghiei" path="res://Hud.tscn" id="5_y40v6"]
+[ext_resource type="Texture2D" uid="uid://cjm3crep01rut" path="res://assets/background.png" id="6_ir6u8"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_r0gi0")
@@ -18,6 +19,13 @@ position = Vector2(0, 1)
 zoom = Vector2(0.3, 0.3)
 
 [node name="Hud" parent="." instance=ExtResource("5_y40v6")]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground"]
+position = Vector2(1044, 609)
+scale = Vector2(1.82375, 1.65)
+texture = ExtResource("6_ir6u8")
 
 [connection signal="PrintDebugMessage" from="." to="Hud" method="ShowDebugMessage"]
 [connection signal="PlayerShipDestroyed" from="Player" to="." method="OnPlayerShipDestroyed"]

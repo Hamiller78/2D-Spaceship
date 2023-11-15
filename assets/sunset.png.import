@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjm3crep01rut"
-path="res://.godot/imported/background.png-1fdba8b6a966ce2c2ffc607f7c096e95.ctex"
+uid="uid://bs24b26r2nky0"
+path="res://.godot/imported/sunset.png-30a7ec18d55516f09d634e03e20d03ef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/background.png"
-dest_files=["res://.godot/imported/background.png-1fdba8b6a966ce2c2ffc607f7c096e95.ctex"]
+source_file="res://assets/sunset.png"
+dest_files=["res://.godot/imported/sunset.png-30a7ec18d55516f09d634e03e20d03ef.ctex"]
 
 [params]
 

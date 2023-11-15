@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bi4wfmxjyw83f" path="res://Explosion.tscn" id="3_alw6m"]
 [ext_resource type="PackedScene" uid="uid://j0wjd86t7k0h" path="res://PlayerShip.tscn" id="3_lju8q"]
 [ext_resource type="PackedScene" uid="uid://cp8h11i0ghiei" path="res://Hud.tscn" id="5_y40v6"]
-[ext_resource type="Texture2D" uid="uid://cjm3crep01rut" path="res://assets/background.png" id="6_ir6u8"]
+[ext_resource type="Texture2D" uid="uid://bs24b26r2nky0" path="res://assets/sunset.png" id="6_q3uct"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_r0gi0")
@@ -25,7 +25,7 @@ zoom = Vector2(0.3, 0.3)
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground"]
 position = Vector2(1044, 609)
 scale = Vector2(1.82375, 1.65)
-texture = ExtResource("6_ir6u8")
+texture = ExtResource("6_q3uct")
 
 [connection signal="PrintDebugMessage" from="." to="Hud" method="ShowDebugMessage"]
 [connection signal="PlayerShipDestroyed" from="Player" to="." method="OnPlayerShipDestroyed"]

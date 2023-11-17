@@ -40,8 +40,6 @@ public partial class PlayerShip : Area2D
 	public override void _Process(double delta)
 	{
 		// Movement
-		var rotation = Rotation;
-
 		if (Input.IsActionPressed("turn_left"))
 		{
 			Rotation -= RadsPerSecond * (float)delta;
@@ -60,9 +58,6 @@ public partial class PlayerShip : Area2D
 			var vy = (float)(_velocity.Y + Math.Sin(Rotation - Math.PI / 2d) * Acceleration * delta);
 			_velocity = new Vector2(vx, vy);
 		}
-			
-		// var newX = (float)(Position.X + _velocity.X * delta + 2f * ScreenSize.X) % (ScreenSize.X * 2f);
-		// var newY = (float)(Position.Y + _velocity.Y * delta + 2f * ScreenSize.Y) % (ScreenSize.Y * 2f);
 
 		var newX = (float)(Position.X + _velocity.X * delta);
 		var newY = (float)(Position.Y + _velocity.Y * delta);

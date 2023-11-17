@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cv4u223cgjpgp"]
+[gd_scene load_steps=8 format=3 uid="uid://cv4u223cgjpgp"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_r0gi0"]
 [ext_resource type="PackedScene" uid="uid://cgn78y5nwvusl" path="res://Turret.tscn" id="2_wb2o4"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://j0wjd86t7k0h" path="res://PlayerShip.tscn" id="3_lju8q"]
 [ext_resource type="PackedScene" uid="uid://cp8h11i0ghiei" path="res://Hud.tscn" id="5_y40v6"]
 [ext_resource type="Texture2D" uid="uid://bs24b26r2nky0" path="res://assets/sunset.png" id="6_q3uct"]
+[ext_resource type="PackedScene" uid="uid://c501yd528vx52" path="res://EnemyShip.tscn" id="7_repfv"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_r0gi0")
@@ -27,5 +28,12 @@ position = Vector2(1044, 609)
 scale = Vector2(1.82375, 1.65)
 texture = ExtResource("6_q3uct")
 
+[node name="EnemyShip" parent="." instance=ExtResource("7_repfv")]
+position = Vector2(1822, 947)
+Acceleration = 150.0
+RadsPerSecond = 1.513
+
 [connection signal="PrintDebugMessage" from="." to="Hud" method="ShowDebugMessage"]
 [connection signal="PlayerShipDestroyed" from="Player" to="." method="OnPlayerShipDestroyed"]
+[connection signal="PositionUpdated" from="Player" to="EnemyShip" method="OnTargetPositionUpdated"]
+[connection signal="EnemyShipDestroyed" from="EnemyShip" to="." method="OnEnemyShipDestroyed"]

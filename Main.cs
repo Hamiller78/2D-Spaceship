@@ -66,6 +66,14 @@ public partial class Main : Node
 		AddChild(explosion);
 	}
 
+	public void OnEnemyShipDestroyed(EnemyShip enemyShip)
+	{
+		var explosion = ExplosionScene.Instantiate<Explosion>();
+		explosion.Position = enemyShip.Position;
+		AddChild(explosion);
+	}
+
+
 	private void SpawnTurrets()
 	{
 		for (int i = 0; i < TURRET_COUNT; i++)

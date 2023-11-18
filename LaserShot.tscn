@@ -20,6 +20,6 @@ scale = Vector2(0.4, 0.4)
 texture = ExtResource("1_hhpci")
 
 [node name="LaserSound" type="AudioStreamPlayer2D" parent="."]
-position = Vector2(0, -11)
+position = Vector2(0, 1)
 stream = ExtResource("3_6y4hg")
 autoplay = true

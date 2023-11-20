@@ -13,7 +13,7 @@ public partial class PlayerShip : Area2D
 	public PackedScene LaserShotScene { get; set; }
 
     [Signal]
-    public delegate void PositionUpdatedEventHandler(Vector2 position);
+    public delegate void PositionUpdatedEventHandler(Vector2 position, Vector2 velocity);
 
 	[Signal]
 	public delegate void PlayerShipDestroyedEventHandler(PlayerShip playerShip);
@@ -64,7 +64,7 @@ public partial class PlayerShip : Area2D
 
 		var newPosition = new Vector2(newX, newY);
 		Position = newPosition;
-		EmitSignal(SignalName.PositionUpdated, newPosition);
+		EmitSignal(SignalName.PositionUpdated, newPosition, _velocity);
 		
 		// Sound
 		if (Input.IsActionPressed("turn_left")

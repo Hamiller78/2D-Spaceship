@@ -45,7 +45,7 @@ public partial class Turret : Area2D
 		FirePrimary();
 	}
 
-	public void OnTargetPositionUpdated(Vector2 position)
+	public void OnTargetPositionUpdated(Vector2 position, Vector2 _)
 	{
 		_targetPosition = position;
 		_targetRotation = (float)(Math.Atan2(position.Y - Position.Y, position.X - Position.X) + Math.PI / 2d);

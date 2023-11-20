@@ -3,6 +3,13 @@ using System;
 
 public partial class EnemyShip : Area2D
 {
+	private enum ManeuverMode
+	{
+		None,
+		Approach,
+		Attack
+	}
+
 	[Export]
 	public float Acceleration { get; set; } = 200f;
 	
@@ -18,8 +25,10 @@ public partial class EnemyShip : Area2D
 	public float FireRange { get; set; } = 600f;
 
 	private Vector2 _targetPosition;
+	private Vector2 _targetVelocity;
 	private float _targetRotation;
 	private float _rechargeTimeRemaining = 0f;	
+	private ManeuverMode _maneuverMode = ManeuverMode.None;
 
 	[Signal]
 	public delegate void EnemyShipDestroyedEventHandler(EnemyShip enemyShip);
@@ -36,6 +45,7 @@ public partial class EnemyShip : Area2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_maneuverMode = ManeuverMode.Approach;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,21 +56,26 @@ public partial class EnemyShip : Area2D
 			_rechargeTimeRemaining -= (float)delta;
 		}
 
-		TurnToTarget(delta);
-
 		var targetDistance = _targetPosition.DistanceTo(Position);
-		if (targetDistance <= FireRange && Math.Abs(_targetRotation - Rotation + (float)Math.PI / 2f) < Math.PI / 4d)
+		if (_maneuverMode == ManeuverMode.Approach && targetDistance <= FireRange)
 		{
-			FirePrimary();
-			StopEngine();
+			_maneuverMode = ManeuverMode.Attack;
 		}
-		else if (Math.Abs(_targetRotation - Rotation + (float)Math.PI / 2f) < Math.PI / 4d)
+		else if (_maneuverMode == ManeuverMode.Attack && targetDistance > FireRange + 200d)
 		{
-			RunEngine(delta);
+			_maneuverMode = ManeuverMode.Approach;
 		}
-		else
+
+		switch (_maneuverMode)
 		{
-			StopEngine();
+			case ManeuverMode.Approach:
+				PerformApproach(delta);
+				break;
+			case ManeuverMode.Attack:
+				PerformAttack(delta);
+				break;
+			default:
+				break;
 		}
 
 		var newX = (float)(Position.X + _velocity.X * delta);
@@ -68,6 +83,38 @@ public partial class EnemyShip : Area2D
 
 		var newPosition = new Vector2(newX, newY);
 		Position = newPosition;		
+	}
+
+	private void PerformAttack(double delta)
+	{
+		TurnToTarget(delta);
+
+		if (Math.Abs(GetDeltaAngleToTarget()) < Math.PI / 4d)
+		{
+			FirePrimary();
+			StopEngine();
+		}		
+	}
+
+	private void PerformApproach(double delta)
+	{
+		var deltaPos = _targetPosition - Position;
+		// var deltaV = _targetVelocity - _velocity;
+
+		var desiredDeltaV = deltaPos.Normalized() * (float)Math.Sqrt(Acceleration * deltaPos.Length());
+		var deltaVDelta = desiredDeltaV - _velocity;
+
+		var shipRotation = GetShipRotation();
+		var rotationDelta = deltaVDelta.Angle() - shipRotation;
+		if (Math.Abs(rotationDelta) < Math.PI / 6f)
+		{
+			RunEngine(delta);
+		}
+		else
+		{
+			StopEngine();
+		}
+		Rotation += Math.Sign(rotationDelta) * RadsPerSecond * (float)delta;
 	}
 
 	public void OnAreaEntered(Area2D area)
@@ -79,9 +126,10 @@ public partial class EnemyShip : Area2D
 		}
 	}	
 
-	public void OnTargetPositionUpdated(Vector2 position)
+	public void OnTargetPositionUpdated(Vector2 position, Vector2 velocity)
 	{
 		_targetPosition = position;
+		_targetVelocity = velocity;
 		_targetRotation = Position.AngleToPoint(_targetPosition);
 	}	
 
@@ -154,5 +202,15 @@ public partial class EnemyShip : Area2D
 			_isEngineRunning = false;
 			GetNode<AnimatedSprite2D>("ShipSprite/EngineFlame").Visible = false;
 		}
+	}
+
+	private float GetDeltaAngleToTarget()
+	{
+		return _targetRotation - Rotation + (float)Math.PI / 2f;
+	}
+
+	private float GetShipRotation()
+	{
+		return Rotation - (float)Math.PI / 2f;
 	}
 }

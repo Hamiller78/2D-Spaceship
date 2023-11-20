@@ -30,7 +30,8 @@ texture = ExtResource("6_q3uct")
 
 [node name="EnemyShip" parent="." instance=ExtResource("7_repfv")]
 position = Vector2(1822, 947)
-RadsPerSecond = 1.995
+Acceleration = 300.0
+RadsPerSecond = 2.5
 
 [connection signal="PrintDebugMessage" from="." to="Hud" method="ShowDebugMessage"]
 [connection signal="PlayerShipDestroyed" from="Player" to="." method="OnPlayerShipDestroyed"]

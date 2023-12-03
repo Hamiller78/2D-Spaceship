@@ -22,7 +22,7 @@ public partial class EnemyShip : Area2D
 	[Export]
 	public float RechargeTime { get; set; } = 0.5f;
 
-	public float FireRange { get; set; } = 600f;
+	public float FireRange { get; set; } = 700f;
 
 	private Vector2 _targetPosition;
 	private Vector2 _targetVelocity;

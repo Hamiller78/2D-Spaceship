@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfpfrfcl7nfec"]
+
+[ext_resource type="Script" path="res://ShipBase.cs" id="1_y2tmk"]
+
+[node name="ShipArea" type="Area2D"]
+script = ExtResource("1_y2tmk")
+
+[node name="ShipSprite" type="AnimatedSprite2D" parent="."]
+
+[node name="EngineSprite" type="AnimatedSprite2D" parent="ShipSprite"]
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+
+[node name="EngineAudioPlayer" type="AudioStreamPlayer2D" parent="."]

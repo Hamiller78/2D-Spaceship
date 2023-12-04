@@ -3,6 +3,8 @@ namespace SpaceGame.Sprites;
 using Godot;
 using System;
 
+using SpaceGame.Utlities;
+
 public partial class ShipBase : Area2D
 {
 	[Export]
@@ -13,6 +15,9 @@ public partial class ShipBase : Area2D
 	
 	[Export]
 	public PackedScene LaserShotScene { get; set; }
+
+	[Export]
+	public float RechargeTime { get; set; } = 0.5f;	
 
     [Signal]
     public delegate void PositionUpdatedEventHandler(Vector2 position, Vector2 velocity);
@@ -28,13 +33,15 @@ public partial class ShipBase : Area2D
 	}
 
 	protected float DeltaSpeed;
-	protected float DeltaRotation;
+	protected Angle DeltaRotation = new();
 	protected float DeltaVelocity;
 
 	private Vector2 _velocity = Vector2.Zero;
 
 	protected bool IsEngineRunning = false;
 	
+	private float _rechargeTimeRemaining = 0f;	
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -45,8 +52,7 @@ public partial class ShipBase : Area2D
 	public override void _Process(double delta)
 	{
 		// Movement
-		RotationDegrees += DeltaRotation;
-		RotationDegrees %= (float)360f;
+		RotationDegrees += DeltaRotation.InDegrees;
 
 		var vx = (float)(_velocity.X + Math.Cos(Rotation) * DeltaVelocity);
 		var vy = (float)(_velocity.Y + Math.Sin(Rotation) * DeltaVelocity);
@@ -75,6 +81,11 @@ public partial class ShipBase : Area2D
 				GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite").Visible = false;
 			}			
 		}
+
+		if (_rechargeTimeRemaining > 0f)
+		{
+			_rechargeTimeRemaining -= (float)delta;
+		}
 	}
 
 	public void OnAreaEntered(Area2D area)
@@ -86,14 +97,19 @@ public partial class ShipBase : Area2D
 		}
 	}
 
-	private void FirePrimary()
+	protected void FirePrimary()
 	{
+		if (_rechargeTimeRemaining > 0f)
+		{
+			return;
+		}
+
 		var newShot = LaserShotScene.Instantiate<LaserShot>();
 		newShot.Position
 			= Position
 				+ new Vector2(
-					70f * (float)Math.Cos(Rotation),
-					70f * (float)Math.Sin(Rotation));;
+					90f * (float)Math.Cos(Rotation),
+					90f * (float)Math.Sin(Rotation));;
 		newShot.Rotation = Rotation;
 		newShot.Velocity = Velocity
 			+ new Vector2(
@@ -101,5 +117,7 @@ public partial class ShipBase : Area2D
 				(float)Math.Sin(newShot.Rotation) * newShot.Speed
 			);
 		GetParent().AddChild(newShot);
+
+		_rechargeTimeRemaining = RechargeTime;		
 	}
 }

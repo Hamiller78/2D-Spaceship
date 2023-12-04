@@ -74,7 +74,7 @@ public partial class PlayerShip : Area2D
 			if (!_isEngineRunning)
 			{
 				_isEngineRunning = true;
-				GetNode<AudioStreamPlayer2D>("EngineSound").Play();
+				GetNode<AudioStreamPlayer>("EngineSound").Play();
 				GetNode<AnimatedSprite2D>("PlayerShip/EngineFlame").Visible = true;		
 			}
 		}
@@ -83,7 +83,7 @@ public partial class PlayerShip : Area2D
 			if (_isEngineRunning)
 			{
 				_isEngineRunning = false;
-				GetNode<AudioStreamPlayer2D>("EngineSound").Stop();
+				GetNode<AudioStreamPlayer>("EngineSound").Stop();
 				GetNode<AnimatedSprite2D>("PlayerShip/EngineFlame").Visible = false;
 			}			
 		}

@@ -184,7 +184,6 @@ public partial class EnemyShip : Area2D
 	{
 		if (!_isEngineRunning)
 		{
-			GD.Print("Engine running");
 			_isEngineRunning = true;
 			GetNode<AnimatedSprite2D>("ShipSprite/EngineFlame").Visible = true;
 		}
@@ -198,7 +197,6 @@ public partial class EnemyShip : Area2D
 	{
 		if (_isEngineRunning)
 		{
-			GD.Print("Engine stopped");
 			_isEngineRunning = false;
 			GetNode<AnimatedSprite2D>("ShipSprite/EngineFlame").Visible = false;
 		}

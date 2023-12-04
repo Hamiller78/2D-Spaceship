@@ -2,15 +2,16 @@ using Godot;
 using System;
 
 using SpaceGame.Sprites;
+using SpaceGame.Utlities;
 
 public partial class EnemyShip2 : ShipBase
 {
 	[Export]
-	public float FireRange { get; set; } = 700f;
+	public float CombatRange { get; set; } = 800f;
 
 	private Vector2 _targetPosition;
 	private Vector2 _targetVelocity;
-	private float _targetRotation;
+	private Angle _targetRotation = new();
 
 	private enum ManeuverMode
 	{
@@ -32,11 +33,11 @@ public partial class EnemyShip2 : ShipBase
 	public override void _Process(double delta)
 	{
 		var targetDistance = _targetPosition.DistanceTo(Position);
-		if (_maneuverMode == ManeuverMode.Approach && targetDistance <= FireRange)
+		if (_maneuverMode == ManeuverMode.Approach && targetDistance <= CombatRange)
 		{
 			_maneuverMode = ManeuverMode.Attack;
 		}
-		else if (_maneuverMode == ManeuverMode.Attack && targetDistance > FireRange + 200d)
+		else if (_maneuverMode == ManeuverMode.Attack && targetDistance > CombatRange + 100f)
 		{
 			_maneuverMode = ManeuverMode.Approach;
 		}
@@ -58,11 +59,12 @@ public partial class EnemyShip2 : ShipBase
 
 	private void PerformAttack(double delta)
 	{
+		StopEngine();
 		TurnToTarget(delta);
 
-		if (Math.Abs(GetDeltaAngleToTarget()) < 45f)
+		if (Math.Abs(_targetRotation.InDegrees - RotationDegrees) < 45f)
 		{
-			// FirePrimary();
+			FirePrimary();
 			StopEngine();
 		}		
 	}
@@ -74,8 +76,8 @@ public partial class EnemyShip2 : ShipBase
 		var desiredDeltaV = deltaPos.Normalized() * (float)Math.Sqrt(MaxAcceleration * deltaPos.Length());
 		var deltaVDelta = desiredDeltaV - Velocity;
 
-		var rotationDelta = deltaVDelta.Angle() * 180f / Math.PI - RotationDegrees;
-		if (Math.Abs(rotationDelta) < 60f)
+		var rotationDelta = new Angle() { InRadians = deltaVDelta.Angle() - Rotation };
+		if (Math.Abs(rotationDelta.InDegrees) < 60f)
 		{
 			RunEngine(delta);
 		}
@@ -83,36 +85,28 @@ public partial class EnemyShip2 : ShipBase
 		{
 			StopEngine();
 		}
-		DeltaRotation = Math.Sign(rotationDelta) * TurnRateDegreesPerSecond * (float)delta;
+		DeltaRotation.InDegrees = Math.Sign(rotationDelta.InDegrees) * TurnRateDegreesPerSecond * (float)delta;
 	}
 
 	public void OnTargetPositionUpdated(Vector2 position, Vector2 velocity)
 	{
 		_targetPosition = position;
 		_targetVelocity = velocity;
-		_targetRotation = Position.AngleToPoint(_targetPosition);
+		_targetRotation.InRadians = Position.AngleToPoint(_targetPosition);
 	}	
 
 	private void TurnToTarget(double delta)
 	{
-		var rotationDelta = _targetRotation - (RotationDegrees - 90f);
-		if (rotationDelta < -180f)
-		{
-			rotationDelta += 360f;
-		}
-		else if (rotationDelta > 180f)
-		{
-			rotationDelta -= 360f;
-		}
-		var rotationStep = TurnRateDegreesPerSecond * (float)delta;
+		var rotationDelta = _targetRotation - new Angle(RotationDegrees);
+		var rotationStep = new Angle(TurnRateDegreesPerSecond * (float)delta);
 
-		if (Math.Abs(rotationDelta) <= rotationStep)
+		if (Math.Abs(rotationDelta.InDegrees) <= rotationStep.InDegrees)
 		{
 			DeltaRotation = rotationDelta;
 		}
 		else
 		{
-			DeltaRotation = Math.Sign(rotationDelta) * rotationStep;
+			DeltaRotation = new Angle(Math.Sign(rotationDelta.InDegrees) * rotationStep.InDegrees);
 		}
 	}
 
@@ -120,9 +114,9 @@ public partial class EnemyShip2 : ShipBase
 	{
 		if (!IsEngineRunning)
 		{
-			GD.Print("Engine running");
 			IsEngineRunning = true;
-			GetNode<AnimatedSprite2D>("ShipSprite/EngineFlame").Visible = true;
+			var engineSprite = GetNode<AnimatedSprite2D>("EnemyShip2/ShipArea/ShipSprite/EngineSprite");
+			engineSprite.Visible = true;
 		}
 		DeltaVelocity = MaxAcceleration * (float)delta;
 	}
@@ -131,14 +125,10 @@ public partial class EnemyShip2 : ShipBase
 	{
 		if (IsEngineRunning)
 		{
-			GD.Print("Engine stopped");
 			IsEngineRunning = false;
-			GetNode<AnimatedSprite2D>("ShipSprite/EngineFlame").Visible = false;
+			var engineSprite = GetNode<AnimatedSprite2D>("EnemyShip2/ShipArea/ShipSprite/EngineSprite");
+			engineSprite.Visible = false;
 		}
-	}
-
-	private float GetDeltaAngleToTarget()
-	{
-		return _targetRotation - RotationDegrees;
+		DeltaVelocity = 0f;
 	}
 }

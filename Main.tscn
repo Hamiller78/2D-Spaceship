@@ -35,7 +35,10 @@ Acceleration = 300.0
 RadsPerSecond = 5.0
 
 [node name="EnemyShip2" parent="." instance=ExtResource("8_lfuu3")]
-FireRange = 700.0
+position = Vector2(2000, 0)
+CombatRange = 700.0
+MaxAcceleration = 400.0
+TurnRateDegreesPerSecond = 360.0
 
 [connection signal="PrintDebugMessage" from="." to="Hud" method="ShowDebugMessage"]
 [connection signal="PlayerShipDestroyed" from="Player" to="." method="OnPlayerShipDestroyed"]
@@ -43,4 +46,5 @@ FireRange = 700.0
 [connection signal="PositionUpdated" from="Player" to="EnemyShip2" method="OnTargetPositionUpdated"]
 [connection signal="EnemyShipDestroyed" from="EnemyShip" to="." method="OnEnemyShipDestroyed"]
 [connection signal="ShipDestroyed" from="EnemyShip2" to="." method="OnEnemyShipDestroyed"]
+[connection signal="ShipDestroyed" from="EnemyShip2" to="." method="OnShipDestroyed"]
 [connection signal="area_entered" from="EnemyShip2" to="EnemyShip2" method="OnAreaEntered"]

@@ -33,11 +33,16 @@ public partial class Main : Node
 	{
 		var camera = GetNode<Camera2D>("Camera2D");
 		var playerShip = GetNode<PlayerShip>("Player");
-		camera.Position = playerShip.Position;
+		camera.Position = playerShip?.Position ?? camera.Position;
 
 		var closestEnemyPosition = GetFurthestTurret();
-		var deltaX = Math.Abs(playerShip.Position.X - closestEnemyPosition.X);
-		var deltaY = Math.Abs(playerShip.Position.Y - closestEnemyPosition.Y);
+		if (closestEnemyPosition is null)
+		{
+			return;
+		}
+
+		var deltaX = Math.Abs(playerShip.Position.X - closestEnemyPosition.Value.X);
+		var deltaY = Math.Abs(playerShip.Position.Y - closestEnemyPosition.Value.Y);
 		var screenSize = GetNode<PlayerShip>("Player").GetViewportRect().Size;
 		var zoomX = Math.Min(1f, 0.5f * screenSize.X / deltaX);
 		var zoomY = Math.Min(1f, 0.5f * screenSize.Y / deltaY);
@@ -101,7 +106,7 @@ public partial class Main : Node
 		_turretsLeft += TURRET_COUNT;
 	}
 
-	private Godot.Vector2 GetFurthestTurret()
+	private Godot.Vector2? GetFurthestTurret()
 	{
 		var playerShip = GetNode<PlayerShip>("Player");
 		var furthestDistance = 0f;
@@ -110,7 +115,7 @@ public partial class Main : Node
 		foreach (var turretNode in GetTree().GetNodesInGroup("Turrets"))
 		{
 			var turret = turretNode as Turret;
-			var distance = turret.Position.DistanceTo(playerShip.Position);
+			var distance = (playerShip?.Position ?? turret.Position).DistanceTo(turret.Position);
 			if (distance > furthestDistance)
 			{
 				furthestDistance = distance;
@@ -118,6 +123,6 @@ public partial class Main : Node
 			}
 		}
 
-		return furthestTurret.Position;
+		return furthestTurret?.Position;
 	}
 }

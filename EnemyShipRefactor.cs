@@ -10,6 +10,9 @@ public partial class EnemyShipRefactor : ShipBase
 	[Export]
 	public float CombatRange { get; set; } = 800f;
 
+	[Signal]
+	public delegate void PrintDebugMessageEventHandler(string debugMessage);
+
 	private Vector2 _targetPosition;
 	private Vector2 _targetVelocity;
 	private Angle _targetRotation = new();
@@ -27,7 +30,7 @@ public partial class EnemyShipRefactor : ShipBase
 	public override void _Ready()
 	{
 		_maneuverMode = ManeuverMode.Approach;
-		base._Ready();		
+		base._Ready();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,7 +45,7 @@ public partial class EnemyShipRefactor : ShipBase
 		{
 			_maneuverMode = ManeuverMode.Approach;
 		}
-		
+
 		switch (_maneuverMode)
 		{
 			case ManeuverMode.Approach:
@@ -67,7 +70,7 @@ public partial class EnemyShipRefactor : ShipBase
 		{
 			FirePrimary();
 			StopEngine();
-		}		
+		}
 	}
 
 	private void PerformApproach(double delta)
@@ -94,7 +97,7 @@ public partial class EnemyShipRefactor : ShipBase
 		_targetPosition = position;
 		_targetVelocity = velocity;
 		_targetRotation.InRadians = Position.AngleToPoint(_targetPosition);
-	}	
+	}
 
 	private void TurnToTarget(double delta)
 	{
@@ -113,23 +116,11 @@ public partial class EnemyShipRefactor : ShipBase
 
 	private void RunEngine(double delta)
 	{
-		if (!IsEngineRunning)
-		{
-			IsEngineRunning = true;
-			var engineSprite = GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite");
-			engineSprite.Visible = true;
-		}
 		DeltaVelocity = MaxAcceleration * (float)delta;
 	}
 
 	private void StopEngine()
 	{
-		if (IsEngineRunning)
-		{
-			IsEngineRunning = false;
-			var engineSprite = GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite");
-			engineSprite.Visible = false;
-		}
 		DeltaVelocity = 0f;
 	}
 }

@@ -65,7 +65,7 @@ public partial class ShipBase : Area2D
 
 		EmitSignal(SignalName.PositionUpdated, newPosition, _velocity);
 
-		// Sound
+		// Sound & Engine flame
 		if (!IsEngineRunning && DeltaVelocity > 0f)
 		{
 			IsEngineRunning = true;

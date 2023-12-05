@@ -45,5 +45,6 @@ TurnRateDegreesPerSecond = 360.0
 [connection signal="PositionUpdated" from="Player" to="EnemyShip" method="OnTargetPositionUpdated"]
 [connection signal="PositionUpdated" from="Player" to="EnemyShipRefactor" method="OnTargetPositionUpdated"]
 [connection signal="EnemyShipDestroyed" from="EnemyShip" to="." method="OnEnemyShipDestroyed"]
+[connection signal="PrintDebugMessage" from="EnemyShipRefactor" to="Hud" method="ShowDebugMessage"]
 [connection signal="ShipDestroyed" from="EnemyShipRefactor" to="." method="OnShipDestroyed"]
 [connection signal="area_entered" from="EnemyShipRefactor" to="EnemyShipRefactor" method="OnAreaEntered"]

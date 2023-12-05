@@ -32,14 +32,13 @@ public partial class Main : Node
     public override void _Process(double delta)
 	{
 		var camera = GetNode<Camera2D>("Camera2D");
-		var playerShip = GetNode<Area2D>("Player");
+		var playerShip = GetNode<PlayerShip>("Player");
 		camera.Position = playerShip.Position;
 
 		var closestEnemyPosition = GetFurthestTurret();
 		var deltaX = Math.Abs(playerShip.Position.X - closestEnemyPosition.X);
 		var deltaY = Math.Abs(playerShip.Position.Y - closestEnemyPosition.Y);
-		playerShip = GetNode<PlayerShip>("Player");
-		var screenSize = GetNode<Area2D>("Player").GetViewportRect().Size;
+		var screenSize = GetNode<PlayerShip>("Player").GetViewportRect().Size;
 		var zoomX = Math.Min(1f, 0.5f * screenSize.X / deltaX);
 		var zoomY = Math.Min(1f, 0.5f * screenSize.Y / deltaY);
 		var zoom = Math.Min(zoomX, zoomY);

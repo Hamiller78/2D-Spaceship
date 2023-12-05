@@ -1,10 +1,11 @@
+namespace SpaceGame.Sprites;
+
 using Godot;
 using System;
 
-using SpaceGame.Sprites;
 using SpaceGame.Utlities;
 
-public partial class EnemyShip2 : ShipBase
+public partial class EnemyShipRefactor : ShipBase
 {
 	[Export]
 	public float CombatRange { get; set; } = 800f;
@@ -41,7 +42,7 @@ public partial class EnemyShip2 : ShipBase
 		{
 			_maneuverMode = ManeuverMode.Approach;
 		}
-
+		
 		switch (_maneuverMode)
 		{
 			case ManeuverMode.Approach:
@@ -62,7 +63,7 @@ public partial class EnemyShip2 : ShipBase
 		StopEngine();
 		TurnToTarget(delta);
 
-		if (Math.Abs(_targetRotation.InDegrees - RotationDegrees) < 45f)
+		if (Math.Abs((_targetRotation - new Angle(RotationDegrees)).InDegrees) < 45f)
 		{
 			FirePrimary();
 			StopEngine();
@@ -115,7 +116,7 @@ public partial class EnemyShip2 : ShipBase
 		if (!IsEngineRunning)
 		{
 			IsEngineRunning = true;
-			var engineSprite = GetNode<AnimatedSprite2D>("EnemyShip2/ShipArea/ShipSprite/EngineSprite");
+			var engineSprite = GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite");
 			engineSprite.Visible = true;
 		}
 		DeltaVelocity = MaxAcceleration * (float)delta;
@@ -126,7 +127,7 @@ public partial class EnemyShip2 : ShipBase
 		if (IsEngineRunning)
 		{
 			IsEngineRunning = false;
-			var engineSprite = GetNode<AnimatedSprite2D>("EnemyShip2/ShipArea/ShipSprite/EngineSprite");
+			var engineSprite = GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite");
 			engineSprite.Visible = false;
 		}
 		DeltaVelocity = 0f;

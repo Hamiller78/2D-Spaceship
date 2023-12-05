@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bkvx5w7vw31xl" path="res://assets/ships_horizontal.png" id="2_7lcex"]
 [ext_resource type="PackedScene" uid="uid://bcel305wto7q2" path="res://LaserShot.tscn" id="2_bl0a5"]
-[ext_resource type="Script" path="res://EnemyShip2.cs" id="2_op22g"]
+[ext_resource type="Script" path="res://EnemyShipRefactor.cs" id="2_op22g"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1muos"]
 atlas = ExtResource("2_7lcex")

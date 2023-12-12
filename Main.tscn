@@ -15,6 +15,9 @@ TurretScene = ExtResource("2_wb2o4")
 ExplosionScene = ExtResource("3_alw6m")
 
 [node name="Player" parent="." instance=ExtResource("3_lju8q")]
+MaxAcceleration = 500.0
+TurnRateDegreesPerSecond = 180.0
+RechargeTime = 0.25
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, 1)
@@ -41,9 +44,9 @@ MaxAcceleration = 400.0
 TurnRateDegreesPerSecond = 360.0
 
 [connection signal="PrintDebugMessage" from="." to="Hud" method="ShowDebugMessage"]
-[connection signal="PlayerShipDestroyed" from="Player" to="." method="OnPlayerShipDestroyed"]
 [connection signal="PositionUpdated" from="Player" to="EnemyShip" method="OnTargetPositionUpdated"]
 [connection signal="PositionUpdated" from="Player" to="EnemyShipRefactor" method="OnTargetPositionUpdated"]
+[connection signal="ShipDestroyed" from="Player" to="." method="OnShipDestroyed"]
 [connection signal="EnemyShipDestroyed" from="EnemyShip" to="." method="OnEnemyShipDestroyed"]
 [connection signal="PrintDebugMessage" from="EnemyShipRefactor" to="Hud" method="ShowDebugMessage"]
 [connection signal="ShipDestroyed" from="EnemyShipRefactor" to="." method="OnShipDestroyed"]

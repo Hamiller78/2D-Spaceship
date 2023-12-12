@@ -9,18 +9,18 @@ public partial class ShipBase : Area2D
 {
 	[Export]
 	public float MaxAcceleration { get; set; } = 200f;
-	
+
 	[Export]
 	public float TurnRateDegreesPerSecond { get; set; } = 360f * 0.4f;
-	
+
 	[Export]
 	public PackedScene LaserShotScene { get; set; }
 
 	[Export]
-	public float RechargeTime { get; set; } = 0.5f;	
+	public float RechargeTime { get; set; } = 0.5f;
 
-    [Signal]
-    public delegate void PositionUpdatedEventHandler(Vector2 position, Vector2 velocity);
+	[Signal]
+	public delegate void PositionUpdatedEventHandler(Vector2 position, Vector2 velocity);
 
 	[Signal]
 	public delegate void ShipDestroyedEventHandler(PlayerShip playerShip);
@@ -39,13 +39,17 @@ public partial class ShipBase : Area2D
 	private Vector2 _velocity = Vector2.Zero;
 
 	protected bool IsEngineRunning = false;
-	
-	private float _rechargeTimeRemaining = 0f;	
 
-	// Called when the node enters the scene tree for the first time.
+	private float _rechargeTimeRemaining = 0f;
+	private AudioStreamPlayer2D _engineAudioPlayer;
+	private AnimatedSprite2D _engineSprite;
+
 	public override void _Ready()
 	{
 		_screenSize = GetViewportRect().Size;
+		_engineAudioPlayer = GetNode<AudioStreamPlayer2D>("EngineAudioPlayer");
+		_engineAudioPlayer.StreamPaused = true;
+		_engineSprite = GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -69,17 +73,17 @@ public partial class ShipBase : Area2D
 		if (!IsEngineRunning && DeltaVelocity > 0f)
 		{
 			IsEngineRunning = true;
-			GetNode<AudioStreamPlayer2D>("EngineAudioPlayer").Play();
-			GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite").Visible = true;
+			_engineAudioPlayer.StreamPaused = false;
+			_engineSprite.Visible = true;
 		}
 		else
 		{
 			if (IsEngineRunning)
 			{
 				IsEngineRunning = false;
-				GetNode<AudioStreamPlayer2D>("EngineAudioPlayer").Stop();
-				GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite").Visible = false;
-			}			
+				_engineAudioPlayer.StreamPaused = true;
+				_engineSprite.Visible = false;
+			}
 		}
 
 		if (_rechargeTimeRemaining > 0f)
@@ -109,7 +113,7 @@ public partial class ShipBase : Area2D
 			= Position
 				+ new Vector2(
 					90f * (float)Math.Cos(Rotation),
-					90f * (float)Math.Sin(Rotation));;
+					90f * (float)Math.Sin(Rotation));
 		newShot.Rotation = Rotation;
 		newShot.Velocity = Velocity
 			+ new Vector2(
@@ -118,6 +122,6 @@ public partial class ShipBase : Area2D
 			);
 		GetParent().AddChild(newShot);
 
-		_rechargeTimeRemaining = RechargeTime;		
+		_rechargeTimeRemaining = RechargeTime;
 	}
 }

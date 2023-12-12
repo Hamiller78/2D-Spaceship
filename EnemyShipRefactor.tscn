@@ -52,3 +52,4 @@ position = Vector2(6, 2)
 shape = SubResource("RectangleShape2D_q0rav")
 
 [node name="EngineAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+autoplay = true

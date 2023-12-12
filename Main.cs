@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Numerics;
 
 using SpaceGame.Sprites;
 
@@ -21,19 +20,21 @@ public partial class Main : Node
 
 	private int _score = 0;
 	private int _turretsLeft = 0;
+	private PlayerShip _playerShip;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
-    {
+	{
+		_playerShip = GetNode<PlayerShip>("Player");
+		GD.Print($"_playerShip: {_playerShip}");
 		SpawnTurrets();
 	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
 	{
 		var camera = GetNode<Camera2D>("Camera2D");
-		var playerShip = GetNode<PlayerShip>("Player");
-		camera.Position = playerShip?.Position ?? camera.Position;
+		camera.Position = _playerShip?.Position ?? camera.Position;
 
 		var closestEnemyPosition = GetFurthestTurret();
 		if (closestEnemyPosition is null)
@@ -41,9 +42,9 @@ public partial class Main : Node
 			return;
 		}
 
-		var deltaX = Math.Abs(playerShip.Position.X - closestEnemyPosition.Value.X);
-		var deltaY = Math.Abs(playerShip.Position.Y - closestEnemyPosition.Value.Y);
-		var screenSize = GetNode<PlayerShip>("Player").GetViewportRect().Size;
+		var deltaX = Math.Abs(_playerShip.Position.X - closestEnemyPosition.Value.X);
+		var deltaY = Math.Abs(_playerShip.Position.Y - closestEnemyPosition.Value.Y);
+		var screenSize = _playerShip.GetViewportRect().Size;
 		var zoomX = Math.Min(1f, 0.5f * screenSize.X / deltaX);
 		var zoomY = Math.Min(1f, 0.5f * screenSize.Y / deltaY);
 		var zoom = Math.Min(zoomX, zoomY);

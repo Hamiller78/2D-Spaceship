@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://co1j64llniyky"]
+[gd_scene load_steps=10 format=3 uid="uid://co1j64llniyky"]
 
 [ext_resource type="Texture2D" uid="uid://bkvx5w7vw31xl" path="res://assets/ships_horizontal.png" id="2_7lcex"]
 [ext_resource type="PackedScene" uid="uid://bcel305wto7q2" path="res://LaserShot.tscn" id="2_bl0a5"]
 [ext_resource type="Script" path="res://EnemyShipRefactor.cs" id="2_op22g"]
+[ext_resource type="PackedScene" uid="uid://bi4wfmxjyw83f" path="res://Explosion.tscn" id="3_w42vg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1muos"]
 atlas = ExtResource("2_7lcex")
@@ -40,6 +41,7 @@ size = Vector2(144, 64)
 [node name="ShipArea" type="Area2D"]
 script = ExtResource("2_op22g")
 LaserShotScene = ExtResource("2_bl0a5")
+ExplosionScene = ExtResource("3_w42vg")
 
 [node name="ShipSprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7ubm6")
@@ -53,3 +55,5 @@ shape = SubResource("RectangleShape2D_q0rav")
 
 [node name="EngineAudioPlayer" type="AudioStreamPlayer2D" parent="."]
 autoplay = true
+
+[connection signal="area_entered" from="." to="." method="OnAreaEntered"]

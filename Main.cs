@@ -26,7 +26,6 @@ public partial class Main : Node
 	public override void _Ready()
 	{
 		_playerShip = GetNode<PlayerShip>("Player");
-		GD.Print($"_playerShip: {_playerShip}");
 		SpawnTurrets();
 	}
 

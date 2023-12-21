@@ -19,6 +19,9 @@ public partial class ShipBase : Area2D
 	[Export]
 	public float RechargeTime { get; set; } = 0.5f;
 
+	[Export]
+	public PackedScene ExplosionScene { get; set; }
+
 	[Signal]
 	public delegate void PositionUpdatedEventHandler(Vector2 position, Vector2 velocity);
 
@@ -96,7 +99,10 @@ public partial class ShipBase : Area2D
 	{
 		if (area is LaserShot)
 		{
-			EmitSignal(SignalName.ShipDestroyed, this);
+			// EmitSignal(SignalName.ShipDestroyed, this);
+			var explosion = ExplosionScene.Instantiate<Explosion>();
+			explosion.Position = Position;
+			GetTree().Root.AddChild(explosion);
 			QueueFree();
 		}
 	}

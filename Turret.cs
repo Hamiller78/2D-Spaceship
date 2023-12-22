@@ -1,37 +1,35 @@
 using Godot;
 using System;
 
-public partial class Turret : Area2D
-{
-	[Export]
-	public PackedScene LaserShotScene { get; set; }
+using SpaceGame.Sprites;
+using SpaceGame.Utlities;
+using System.Numerics;
 
+public partial class Turret : ShipBase
+{
 	[Signal]
 	public delegate void TurretDestroyedEventHandler(Turret turret);
 
-	public float TurnRate { get; set; } = 2f * (float)Math.PI * 0.2f;
-	public float FireRange { get; set; } = 600f;
-	public float ViewRange { get; set; } = 800f;
-	public float RechargeTime { get; set; } = 0.5f;
-	private Vector2 _targetPosition;
-	private float _targetRotation;
-	private float _rechargeTimeRemaining = 0f;
+	[Export]
+	public float FireRange { get; set; }
+
+	[Export]
+	public float ViewRange { get; set; }
+
+	private Godot.Vector2 _targetPosition;
+	private Angle _angleToTarget = new();
 
 	public override void _Ready()
 	{
-		_rechargeTimeRemaining = RechargeTime;
+		base._Ready();
 	}
 
 	public override void _Process(double delta)
 	{
-		if (_rechargeTimeRemaining > 0f)
-		{
-			_rechargeTimeRemaining -= (float)delta;
-		}
-
 		var targetDistance = _targetPosition.DistanceTo(Position);
 		if (targetDistance > ViewRange)
 		{
+			base._Process(delta);
 			return;
 		}
 
@@ -39,71 +37,31 @@ public partial class Turret : Area2D
 
 		if (targetDistance > FireRange)
 		{
+			base._Process(delta);
 			return;
 		}
 
 		FirePrimary();
+		base._Process(delta);
 	}
 
-	public void OnTargetPositionUpdated(Vector2 position, Vector2 _)
+	public void OnTargetPositionUpdated(Godot.Vector2 position, Godot.Vector2 velocity)
 	{
 		_targetPosition = position;
-		_targetRotation = (float)(Math.Atan2(position.Y - Position.Y, position.X - Position.X) + Math.PI / 2d);
-	}
-
-	public void OnAreaEntered(Area2D area)
-	{
-		if (area is LaserShot)
-		{
-			EmitSignal(SignalName.TurretDestroyed, this);
-			QueueFree();
-		}
+		_angleToTarget.InRadians = Position.AngleToPoint(_targetPosition);
 	}
 
 	private void TurnTurret(double delta)
 	{
-		var rotationDelta = _targetRotation - Rotation;
-		if (rotationDelta < -Math.PI)
+		var rotationDelta = _angleToTarget - new Angle(RotationDegrees);
+		var rotationStep = new Angle(TurnRateDegreesPerSecond * (float)delta);
+		if (Math.Abs(rotationDelta.InDegrees) <= rotationStep.InDegrees)
 		{
-			rotationDelta += (float)(2d * Math.PI);
-		}
-		else if (rotationDelta > Math.PI)
-		{
-			rotationDelta -= (float)(2d * Math.PI);
-		}
-		var rotationStep = TurnRate * (float)delta;
-
-		if (Math.Abs(rotationDelta) <= rotationStep)
-		{
-			Rotation = _targetRotation;
+			DeltaRotation = rotationDelta;
 		}
 		else
 		{
-			Rotation += Math.Sign(rotationDelta) * rotationStep;
+			DeltaRotation = new Angle(Math.Sign(rotationDelta.InDegrees) * rotationStep.InDegrees);
 		}
-	}
-
-	private void FirePrimary()
-	{
-		if (_rechargeTimeRemaining > 0f)
-		{
-			return;
-		}
-
-		var newShot = LaserShotScene.Instantiate<LaserShot>();
-		newShot.Position
-			= Position
-				+ new Vector2(
-					90f * (float)Math.Cos(Rotation - Math.PI / 2d),
-					90f * (float)Math.Sin(Rotation - Math.PI / 2d));
-		newShot.Rotation = Rotation;
-		newShot.Velocity =
-			new Vector2(
-			  	(float)Math.Cos(newShot.Rotation - Math.PI / 2d) * newShot.Speed,
-				(float)Math.Sin(newShot.Rotation - Math.PI / 2d) * newShot.Speed
-			);
-		GetParent().AddChild(newShot);
-
-		_rechargeTimeRemaining = RechargeTime;
 	}
 }

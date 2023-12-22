@@ -40,7 +40,10 @@ size = Vector2(144, 64)
 
 [node name="ShipArea" type="Area2D"]
 script = ExtResource("2_op22g")
+MaxAcceleration = 200.0
+TurnRateDegreesPerSecond = 180.0
 LaserShotScene = ExtResource("2_bl0a5")
+RechargeTime = 0.1
 ExplosionScene = ExtResource("3_w42vg")
 
 [node name="ShipSprite" type="AnimatedSprite2D" parent="."]

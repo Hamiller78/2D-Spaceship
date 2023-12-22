@@ -40,8 +40,9 @@ RadsPerSecond = 5.0
 [node name="EnemyShipRefactor" parent="." instance=ExtResource("8_lfuu3")]
 position = Vector2(2000, 0)
 CombatRange = 700.0
-MaxAcceleration = 400.0
+MaxAcceleration = 600.0
 TurnRateDegreesPerSecond = 360.0
+RechargeTime = 0.5
 
 [connection signal="PrintDebugMessage" from="." to="Hud" method="ShowDebugMessage"]
 [connection signal="PositionUpdated" from="Player" to="EnemyShip" method="OnTargetPositionUpdated"]
@@ -50,4 +51,3 @@ TurnRateDegreesPerSecond = 360.0
 [connection signal="EnemyShipDestroyed" from="EnemyShip" to="." method="OnEnemyShipDestroyed"]
 [connection signal="PrintDebugMessage" from="EnemyShipRefactor" to="Hud" method="ShowDebugMessage"]
 [connection signal="ShipDestroyed" from="EnemyShipRefactor" to="." method="OnShipDestroyed"]
-[connection signal="area_entered" from="EnemyShipRefactor" to="EnemyShipRefactor" method="OnAreaEntered"]

@@ -1,24 +1,40 @@
-[gd_scene load_steps=5 format=3 uid="uid://cgn78y5nwvusl"]
+[gd_scene load_steps=7 format=3 uid="uid://cgn78y5nwvusl"]
 
 [ext_resource type="Script" path="res://Turret.cs" id="1_3lyxr"]
 [ext_resource type="Texture2D" uid="uid://eqjyrl45vjg1" path="res://assets/Turret01.png" id="1_sbwb7"]
 [ext_resource type="PackedScene" uid="uid://bcel305wto7q2" path="res://LaserShot.tscn" id="2_wnmvr"]
+[ext_resource type="PackedScene" uid="uid://bi4wfmxjyw83f" path="res://Explosion.tscn" id="3_ptioi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pyual"]
 radius = 40.6079
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_5xlf4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_sbwb7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="Turret" type="Area2D"]
 script = ExtResource("1_3lyxr")
+FireRange = 600.0
+ViewRange = 800.0
+TurnRateDegreesPerSecond = 120.0
 LaserShotScene = ExtResource("2_wnmvr")
+RechargeTime = 0.5
+ExplosionScene = ExtResource("3_ptioi")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -1)
 shape = SubResource("CircleShape2D_pyual")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -23)
-texture = ExtResource("1_sbwb7")
+[node name="ShipSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(21, 0)
+sprite_frames = SubResource("SpriteFrames_5xlf4")
 flip_v = true
 
 [connection signal="area_entered" from="." to="." method="OnAreaEntered"]
-[connection signal="body_entered" from="." to="." method="OnBodyEntered"]

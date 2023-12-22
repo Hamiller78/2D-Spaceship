@@ -1,7 +1,6 @@
 namespace SpaceGame.Sprites;
 
 using Godot;
-using System;
 
 using SpaceGame.Utlities;
 
@@ -11,6 +10,7 @@ public partial class PlayerShip : ShipBase
 	{
 		Position = new Vector2(-500f, 175f);
 		base._Ready();
+		GD.Print($"RechargeTime: {RechargeTime}");
 	}
 
 	public override void _Process(double delta)

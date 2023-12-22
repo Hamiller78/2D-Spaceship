@@ -80,14 +80,6 @@ public partial class Main : Node
 		AddChild(explosion);
 	}
 
-	public void OnShipDestroyed(ShipBase ship)
-	{
-		var explosion = ExplosionScene.Instantiate<Explosion>();
-		explosion.Position = ship.Position;
-		AddChild(explosion);
-	}
-
-
 	private void SpawnTurrets()
 	{
 		for (int i = 0; i < TURRET_COUNT; i++)
@@ -95,7 +87,6 @@ public partial class Main : Node
 			var screenSize = GetNode<Area2D>("Player").GetViewportRect().Size;
 			var turret = TurretScene.Instantiate<Turret>();
 			turret.Position = new Godot.Vector2(GD.Randi() % (screenSize.X * 2f), GD.Randi() % (screenSize.Y * 2f));
-			turret.Connect(nameof(Turret.TurretDestroyed), new Callable(this, nameof(OnTurretDestroyed)));
 
 			var playerShip = GetNode<PlayerShip>("Player");
 			playerShip.Connect(nameof(PlayerShip.PositionUpdated), new Callable(turret, nameof(Turret.OnTargetPositionUpdated)));

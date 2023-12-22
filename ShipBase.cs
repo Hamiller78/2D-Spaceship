@@ -8,16 +8,16 @@ using SpaceGame.Utlities;
 public partial class ShipBase : Area2D
 {
 	[Export]
-	public float MaxAcceleration { get; set; } = 200f;
+	public float MaxAcceleration { get; set; }
 
 	[Export]
-	public float TurnRateDegreesPerSecond { get; set; } = 360f * 0.4f;
+	public float TurnRateDegreesPerSecond { get; set; }
 
 	[Export]
 	public PackedScene LaserShotScene { get; set; }
 
 	[Export]
-	public float RechargeTime { get; set; } = 0.5f;
+	public float RechargeTime { get; set; }
 
 	[Export]
 	public PackedScene ExplosionScene { get; set; }
@@ -50,9 +50,26 @@ public partial class ShipBase : Area2D
 	public override void _Ready()
 	{
 		_screenSize = GetViewportRect().Size;
-		_engineAudioPlayer = GetNode<AudioStreamPlayer2D>("EngineAudioPlayer");
-		_engineAudioPlayer.StreamPaused = true;
-		_engineSprite = GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite");
+		try
+		{
+			_engineAudioPlayer = GetNode<AudioStreamPlayer2D>("EngineAudioPlayer");
+		}
+		catch
+		{
+			_engineAudioPlayer = null;
+		}
+		if (_engineAudioPlayer is not null)
+		{
+			_engineAudioPlayer.StreamPaused = true;
+		}
+		try
+		{
+			_engineSprite = GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite");
+		}
+		catch
+		{
+			_engineSprite = null;
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -76,16 +93,28 @@ public partial class ShipBase : Area2D
 		if (!IsEngineRunning && DeltaVelocity > 0f)
 		{
 			IsEngineRunning = true;
-			_engineAudioPlayer.StreamPaused = false;
-			_engineSprite.Visible = true;
+			if (_engineAudioPlayer is not null)
+			{
+				_engineAudioPlayer.StreamPaused = false;
+			}
+			if (_engineSprite is not null)
+			{
+				_engineSprite.Visible = true;
+			}
 		}
 		else
 		{
 			if (IsEngineRunning)
 			{
 				IsEngineRunning = false;
-				_engineAudioPlayer.StreamPaused = true;
-				_engineSprite.Visible = false;
+				if (_engineAudioPlayer is not null)
+				{
+					_engineAudioPlayer.StreamPaused = true;
+				}
+				if (_engineSprite is not null)
+				{
+					_engineSprite.Visible = false;
+				}
 			}
 		}
 
@@ -99,7 +128,6 @@ public partial class ShipBase : Area2D
 	{
 		if (area is LaserShot)
 		{
-			// EmitSignal(SignalName.ShipDestroyed, this);
 			var explosion = ExplosionScene.Instantiate<Explosion>();
 			explosion.Position = Position;
 			GetTree().Root.AddChild(explosion);

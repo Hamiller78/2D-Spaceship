@@ -94,7 +94,10 @@ loop = true
 [node name="ShipArea" type="Area2D"]
 scale = Vector2(5, 5)
 script = ExtResource("1_fbwsa")
+MaxAcceleration = 200.0
+TurnRateDegreesPerSecond = 360.0
 LaserShotScene = ExtResource("2_38xfx")
+RechargeTime = 0.1
 ExplosionScene = ExtResource("3_4ifnu")
 
 [node name="ShipSprite" type="AnimatedSprite2D" parent="."]

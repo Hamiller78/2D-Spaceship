@@ -23,6 +23,7 @@ animations = [{
 script = ExtResource("1_3lyxr")
 FireRange = 600.0
 ViewRange = 800.0
+MaxAngle = 90.0
 TurnRateDegreesPerSecond = 120.0
 LaserShotScene = ExtResource("2_wnmvr")
 RechargeTime = 0.5

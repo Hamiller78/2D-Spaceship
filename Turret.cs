@@ -16,6 +16,9 @@ public partial class Turret : ShipBase
 	[Export]
 	public float ViewRange { get; set; }
 
+	[Export]
+	public float MaxAngle { get; set; }
+
 	private Godot.Vector2 _targetPosition;
 	private Angle _angleToTarget = new();
 
@@ -53,7 +56,13 @@ public partial class Turret : ShipBase
 
 	private void TurnTurret(double delta)
 	{
-		var rotationDelta = _angleToTarget - new Angle(RotationDegrees);
+		var targetAngle = _angleToTarget;
+		if (Math.Abs(targetAngle.InDegrees) > MaxAngle)
+		{
+			targetAngle = new Angle(Math.Sign(targetAngle.InDegrees) * MaxAngle);
+		}
+
+		var rotationDelta = targetAngle - new Angle(RotationDegrees);
 		var rotationStep = new Angle(TurnRateDegreesPerSecond * (float)delta);
 		if (Math.Abs(rotationDelta.InDegrees) <= rotationStep.InDegrees)
 		{

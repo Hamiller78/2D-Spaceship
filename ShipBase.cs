@@ -129,7 +129,7 @@ public partial class ShipBase : Area2D
 		if (area is LaserShot)
 		{
 			var explosion = ExplosionScene.Instantiate<Explosion>();
-			explosion.Position = Position;
+			explosion.Position = GlobalPosition;
 			GetTree().Root.AddChild(explosion);
 			QueueFree();
 		}

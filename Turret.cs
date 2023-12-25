@@ -3,7 +3,6 @@ using System;
 
 using SpaceGame.Sprites;
 using SpaceGame.Utlities;
-using System.Numerics;
 
 public partial class Turret : ShipBase
 {
@@ -17,6 +16,9 @@ public partial class Turret : ShipBase
 	public float ViewRange { get; set; }
 
 	[Export]
+	public float StartRotationDegrees { get; set; }
+
+	[Export]
 	public float MaxAngle { get; set; }
 
 	private Godot.Vector2 _targetPosition;
@@ -24,53 +26,48 @@ public partial class Turret : ShipBase
 
 	public override void _Ready()
 	{
+		RotationDegrees = StartRotationDegrees;
 		base._Ready();
 	}
 
 	public override void _Process(double delta)
 	{
-		var targetDistance = _targetPosition.DistanceTo(Position);
-		if (targetDistance > ViewRange)
+		var targetDistance = _targetPosition.DistanceTo(GlobalPosition);
+		if (targetDistance < ViewRange)
 		{
-			base._Process(delta);
-			return;
+			TurnTurret(delta);
 		}
 
-		TurnTurret(delta);
-
-		if (targetDistance > FireRange)
+		if (targetDistance < FireRange)
 		{
-			base._Process(delta);
-			return;
+			FirePrimary();
 		}
 
-		FirePrimary();
 		base._Process(delta);
 	}
 
 	public void OnTargetPositionUpdated(Godot.Vector2 position, Godot.Vector2 velocity)
 	{
 		_targetPosition = position;
-		_angleToTarget.InRadians = Position.AngleToPoint(_targetPosition);
+		_angleToTarget.InRadians = GlobalPosition.AngleToPoint(_targetPosition);
 	}
 
 	private void TurnTurret(double delta)
 	{
-		var targetAngle = _angleToTarget;
-		if (Math.Abs(targetAngle.InDegrees) > MaxAngle)
-		{
-			targetAngle = new Angle(Math.Sign(targetAngle.InDegrees) * MaxAngle);
-		}
+		// Get the rotation the turret has to go for to face the target
+		var relativeRotationDegrees = RotationDegrees - GlobalRotationDegrees;
+		var targetRotation = _angleToTarget - new Angle(relativeRotationDegrees);
 
-		var rotationDelta = targetAngle - new Angle(RotationDegrees);
-		var rotationStep = new Angle(TurnRateDegreesPerSecond * (float)delta);
-		if (Math.Abs(rotationDelta.InDegrees) <= rotationStep.InDegrees)
+		// Set the rotation step and adjust for movement limit
+		DeltaRotation = new Angle(Math.Sign(targetRotation.InDegrees) * TurnRateDegreesPerSecond * (float)delta);
+
+		if (RotationDegrees + DeltaRotation.InDegrees > StartRotationDegrees + MaxAngle)
 		{
-			DeltaRotation = rotationDelta;
+			DeltaRotation = new Angle(StartRotationDegrees + MaxAngle - RotationDegrees);
 		}
-		else
+		else if (RotationDegrees + DeltaRotation.InDegrees < StartRotationDegrees - MaxAngle)
 		{
-			DeltaRotation = new Angle(Math.Sign(rotationDelta.InDegrees) * rotationStep.InDegrees);
+			DeltaRotation = new Angle(StartRotationDegrees - MaxAngle - RotationDegrees);
 		}
 	}
 }

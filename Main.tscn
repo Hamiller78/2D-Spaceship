@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cv4u223cgjpgp"]
+[gd_scene load_steps=11 format=3 uid="uid://cv4u223cgjpgp"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_r0gi0"]
 [ext_resource type="PackedScene" uid="uid://cgn78y5nwvusl" path="res://Turret.tscn" id="2_wb2o4"]
@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://bs24b26r2nky0" path="res://assets/sunset.png" id="6_q3uct"]
 [ext_resource type="PackedScene" uid="uid://c501yd528vx52" path="res://EnemyShip.tscn" id="7_repfv"]
 [ext_resource type="PackedScene" uid="uid://co1j64llniyky" path="res://EnemyShipRefactor.tscn" id="8_lfuu3"]
+[ext_resource type="PackedScene" uid="uid://c4exwjt4fi3mj" path="res://BossShip.tscn" id="9_eobqe"]
+[ext_resource type="PackedScene" uid="uid://bcel305wto7q2" path="res://LaserShot.tscn" id="10_lcafy"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_r0gi0")
@@ -44,9 +46,19 @@ MaxAcceleration = 600.0
 TurnRateDegreesPerSecond = 360.0
 RechargeTime = 0.5
 
+[node name="BossShip" parent="." instance=ExtResource("9_eobqe")]
+position = Vector2(0, 1500)
+rotation = -0.55676
+MaxAcceleration = 100.0
+TurnRateDegreesPerSecond = 90.0
+LaserShotScene = ExtResource("10_lcafy")
+RechargeTime = 0.05
+ExplosionScene = ExtResource("3_alw6m")
+
 [connection signal="PrintDebugMessage" from="." to="Hud" method="ShowDebugMessage"]
 [connection signal="PositionUpdated" from="Player" to="EnemyShip" method="OnTargetPositionUpdated"]
 [connection signal="PositionUpdated" from="Player" to="EnemyShipRefactor" method="OnTargetPositionUpdated"]
+[connection signal="PositionUpdated" from="Player" to="BossShip" method="OnTargetPositionUpdated"]
 [connection signal="ShipDestroyed" from="Player" to="." method="OnShipDestroyed"]
 [connection signal="EnemyShipDestroyed" from="EnemyShip" to="." method="OnEnemyShipDestroyed"]
 [connection signal="PrintDebugMessage" from="EnemyShipRefactor" to="Hud" method="ShowDebugMessage"]

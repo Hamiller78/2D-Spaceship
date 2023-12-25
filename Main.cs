@@ -9,6 +9,9 @@ public partial class Main : Node
 	public PackedScene TurretScene { get; set; }
 
 	[Export]
+	public PackedScene BossShipScene { get; set; }
+
+	[Export]
 	public PackedScene ExplosionScene { get; set; }
 
 	[Signal]
@@ -26,7 +29,7 @@ public partial class Main : Node
 	public override void _Ready()
 	{
 		_playerShip = GetNode<PlayerShip>("Player");
-		SpawnTurrets();
+		// SpawnTurrets();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

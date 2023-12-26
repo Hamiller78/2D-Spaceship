@@ -96,7 +96,6 @@ public partial class BossShip : ShipBase
 		_targetPosition = position;
 		_targetVelocity = velocity;
 		_targetRotation.InRadians = Position.AngleToPoint(_targetPosition);
-		GD.Print($"Target position updated: {_targetPosition}");
 		EmitSignal(SignalName.TargetPositionUpdated, position, velocity);
 	}
 

@@ -19,9 +19,12 @@ public partial class Turret : ShipBase
 	public float StartRotationDegrees { get; set; }
 
 	[Export]
-	public float MaxAngle { get; set; }
+	public float MinRotationDegrees { get; set; }
 
-	private Godot.Vector2 _targetPosition;
+	[Export]
+	public float MaxRotationDegrees { get; set; }
+
+	private Vector2 _targetPosition;
 	private Angle _angleToTarget = new();
 
 	public override void _Ready()
@@ -55,19 +58,20 @@ public partial class Turret : ShipBase
 	private void TurnTurret(double delta)
 	{
 		// Get the rotation the turret has to go for to face the target
-		var relativeRotationDegrees = RotationDegrees - GlobalRotationDegrees;
-		var targetRotation = _angleToTarget - new Angle(relativeRotationDegrees);
-
+		var relativeRotationDegrees = new Angle(RotationDegrees - GlobalRotationDegrees);
+		var targetRotation = _angleToTarget - relativeRotationDegrees;
+		GD.Print($"targetRotation: {targetRotation.InDegrees}");
 		// Set the rotation step and adjust for movement limit
-		DeltaRotation = new Angle(Math.Sign(targetRotation.InDegrees) * TurnRateDegreesPerSecond * (float)delta);
-
-		if (RotationDegrees + DeltaRotation.InDegrees > StartRotationDegrees + MaxAngle)
+		DeltaRotation = new Angle(Math.Sign(targetRotation.InDegrees - RotationDegrees) * TurnRateDegreesPerSecond * (float)delta);
+		GD.Print($"DeltaRotation before correction: {DeltaRotation.InDegrees}");
+		if (RotationDegrees + DeltaRotation.InDegrees > MaxRotationDegrees)
 		{
-			DeltaRotation = new Angle(StartRotationDegrees + MaxAngle - RotationDegrees);
+			DeltaRotation = new Angle(MaxRotationDegrees - RotationDegrees);
 		}
-		else if (RotationDegrees + DeltaRotation.InDegrees < StartRotationDegrees - MaxAngle)
+		else if (RotationDegrees + DeltaRotation.InDegrees < -MinRotationDegrees)
 		{
-			DeltaRotation = new Angle(StartRotationDegrees - MaxAngle - RotationDegrees);
+			DeltaRotation = new Angle(MinRotationDegrees - RotationDegrees);
 		}
+		GD.Print($"DeltaRotation after correction: {DeltaRotation.InDegrees}");
 	}
 }

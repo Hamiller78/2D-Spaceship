@@ -114,7 +114,7 @@ position = Vector2(153, 122)
 rotation = 0.785398
 scale = Vector2(0.75, 0.75)
 StartRotationDegrees = 45.0
-MaxAngle = 60.0
+TurnRateDegreesPerSecond = 90.0
 RechargeTime = 0.2
 
 [node name="Turret2" parent="." instance=ExtResource("6_s7xl6")]
@@ -122,7 +122,7 @@ position = Vector2(153, -122)
 rotation = -0.785398
 scale = Vector2(0.75, 0.75)
 StartRotationDegrees = -45.0
-MaxAngle = 60.0
+TurnRateDegreesPerSecond = 90.0
 RechargeTime = 0.2
 
 [connection signal="TargetPositionUpdated" from="." to="Turret" method="OnTargetPositionUpdated"]

@@ -132,5 +132,43 @@ MaxRotationDegrees = 10.0
 TurnRateDegreesPerSecond = 90.0
 RechargeTime = 0.2
 
+[node name="Turret3" parent="." instance=ExtResource("6_s7xl6")]
+position = Vector2(-152, 82)
+scale = Vector2(0.75, 0.75)
+StartRotationDegrees = 180.0
+MinRotationDegrees = 120.0
+MaxRotationDegrees = -120.0
+RechargeTime = 0.2
+
+[node name="Turret4" parent="." instance=ExtResource("6_s7xl6")]
+position = Vector2(-152, -82)
+scale = Vector2(0.75, 0.75)
+StartRotationDegrees = 180.0
+MinRotationDegrees = 120.0
+MaxRotationDegrees = -120.0
+RechargeTime = 0.2
+
+[node name="Turret5" parent="." instance=ExtResource("6_s7xl6")]
+position = Vector2(0, 151)
+scale = Vector2(0.75, 0.75)
+StartRotationDegrees = 90.0
+MinRotationDegrees = 20.0
+MaxRotationDegrees = 160.0
+TurnRateDegreesPerSecond = 90.0
+RechargeTime = 0.2
+
+[node name="Turret6" parent="." instance=ExtResource("6_s7xl6")]
+position = Vector2(0, -151)
+scale = Vector2(0.75, 0.75)
+StartRotationDegrees = -90.0
+MinRotationDegrees = -160.0
+MaxRotationDegrees = -20.0
+TurnRateDegreesPerSecond = 90.0
+RechargeTime = 0.2
+
 [connection signal="TargetPositionUpdated" from="." to="Turret" method="OnTargetPositionUpdated"]
 [connection signal="TargetPositionUpdated" from="." to="Turret2" method="OnTargetPositionUpdated"]
+[connection signal="TargetPositionUpdated" from="." to="Turret3" method="OnTargetPositionUpdated"]
+[connection signal="TargetPositionUpdated" from="." to="Turret4" method="OnTargetPositionUpdated"]
+[connection signal="TargetPositionUpdated" from="." to="Turret5" method="OnTargetPositionUpdated"]
+[connection signal="TargetPositionUpdated" from="." to="Turret6" method="OnTargetPositionUpdated"]

@@ -29,7 +29,7 @@ public partial class Main : Node
 	public override void _Ready()
 	{
 		_playerShip = GetNode<PlayerShip>("Player");
-		// SpawnTurrets();
+		SpawnTurrets();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

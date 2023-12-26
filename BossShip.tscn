@@ -96,6 +96,7 @@ sprite_frames = SubResource("SpriteFrames_h5ky5")
 position = Vector2(-241, 0)
 scale = Vector2(7.81579, 5.33333)
 sprite_frames = SubResource("SpriteFrames_g4dgi")
+frame_progress = 0.525181
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(71.5, -0.5)

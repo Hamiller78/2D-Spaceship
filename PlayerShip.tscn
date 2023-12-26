@@ -111,7 +111,7 @@ position = Vector2(-14.4144, -7.92793)
 scale = Vector2(0.655405, 0.871148)
 sprite_frames = SubResource("SpriteFrames_bn483")
 autoplay = "default"
-frame_progress = 0.133141
+frame_progress = 0.765513
 offset = Vector2(4.5, 9)
 flip_v = true
 

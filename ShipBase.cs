@@ -65,6 +65,7 @@ public partial class ShipBase : Area2D
 		try
 		{
 			_engineSprite = GetNode<AnimatedSprite2D>("ShipSprite/EngineSprite");
+			_engineSprite.Play();
 		}
 		catch
 		{

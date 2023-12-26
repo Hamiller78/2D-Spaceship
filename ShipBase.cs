@@ -76,7 +76,16 @@ public partial class ShipBase : Area2D
 	public override void _Process(double delta)
 	{
 		// Movement
-		RotationDegrees += DeltaRotation.InDegrees;
+		var newRotationDegrees = RotationDegrees + DeltaRotation.InDegrees;
+		if (newRotationDegrees < -180f)
+		{
+			newRotationDegrees += 360f;
+		}
+		else if (newRotationDegrees > 180f)
+		{
+			newRotationDegrees -= 360f;
+		}
+		RotationDegrees = newRotationDegrees;
 
 		var vx = (float)(_velocity.X + Math.Cos(Rotation) * DeltaVelocity);
 		var vy = (float)(_velocity.Y + Math.Sin(Rotation) * DeltaVelocity);

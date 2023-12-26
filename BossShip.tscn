@@ -113,7 +113,10 @@ script = ExtResource("5_ek8ik")
 position = Vector2(153, 122)
 rotation = 0.785398
 scale = Vector2(0.75, 0.75)
-StartRotationDegrees = 45.0
+FireRange = 750.0
+ViewRange = 1500.0
+MinRotationDegrees = -10.0
+MaxRotationDegrees = 120.0
 TurnRateDegreesPerSecond = 90.0
 RechargeTime = 0.2
 
@@ -121,7 +124,10 @@ RechargeTime = 0.2
 position = Vector2(153, -122)
 rotation = -0.785398
 scale = Vector2(0.75, 0.75)
-StartRotationDegrees = -45.0
+FireRange = 750.0
+ViewRange = 1500.0
+MinRotationDegrees = -120.0
+MaxRotationDegrees = 10.0
 TurnRateDegreesPerSecond = 90.0
 RechargeTime = 0.2
 

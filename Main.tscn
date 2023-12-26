@@ -49,8 +49,9 @@ RechargeTime = 0.5
 [node name="BossShip" parent="." instance=ExtResource("9_eobqe")]
 position = Vector2(0, 1500)
 rotation = -0.55676
+CombatRange = 250.0
 MaxAcceleration = 100.0
-TurnRateDegreesPerSecond = 90.0
+TurnRateDegreesPerSecond = 45.0
 LaserShotScene = ExtResource("10_lcafy")
 RechargeTime = 0.05
 ExplosionScene = ExtResource("3_alw6m")

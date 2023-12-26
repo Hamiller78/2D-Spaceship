@@ -58,20 +58,18 @@ public partial class Turret : ShipBase
 	private void TurnTurret(double delta)
 	{
 		// Get the rotation the turret has to go for to face the target
-		var relativeRotationDegrees = new Angle(RotationDegrees - GlobalRotationDegrees);
-		var targetRotation = _angleToTarget - relativeRotationDegrees;
-		GD.Print($"targetRotation: {targetRotation.InDegrees}");
+		var rotationParent = new Angle(GlobalRotationDegrees - RotationDegrees);
+		var targetRotation = _angleToTarget - rotationParent;
+
 		// Set the rotation step and adjust for movement limit
 		DeltaRotation = new Angle(Math.Sign(targetRotation.InDegrees - RotationDegrees) * TurnRateDegreesPerSecond * (float)delta);
-		GD.Print($"DeltaRotation before correction: {DeltaRotation.InDegrees}");
 		if (RotationDegrees + DeltaRotation.InDegrees > MaxRotationDegrees)
 		{
 			DeltaRotation = new Angle(MaxRotationDegrees - RotationDegrees);
 		}
-		else if (RotationDegrees + DeltaRotation.InDegrees < -MinRotationDegrees)
+		else if (RotationDegrees + DeltaRotation.InDegrees < MinRotationDegrees)
 		{
 			DeltaRotation = new Angle(MinRotationDegrees - RotationDegrees);
 		}
-		GD.Print($"DeltaRotation after correction: {DeltaRotation.InDegrees}");
 	}
 }

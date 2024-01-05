@@ -35,6 +35,8 @@ public partial class Turret : ShipBase
 
 	public override void _Process(double delta)
 	{
+		DeltaRotation = new Angle(0f);
+
 		var targetDistance = _targetPosition.DistanceTo(GlobalPosition);
 		if (targetDistance < ViewRange)
 		{
@@ -49,27 +51,26 @@ public partial class Turret : ShipBase
 		base._Process(delta);
 	}
 
-	public void OnTargetPositionUpdated(Godot.Vector2 position, Godot.Vector2 velocity)
+	public void OnTargetPositionUpdated(Vector2 position, Vector2 velocity)
 	{
 		_targetPosition = position;
-		_angleToTarget.InRadians = GlobalPosition.AngleToPoint(_targetPosition);
+		_angleToTarget
+			= NavigationManager.GetGlobalAngleToTarget(
+				GlobalPosition,
+				_targetPosition,
+				GlobalRotationDegrees - RotationDegrees);
 	}
 
 	private void TurnTurret(double delta)
 	{
-		// Get the rotation the turret has to go for to face the target
-		var rotationParent = new Angle(GlobalRotationDegrees - RotationDegrees);
-		var targetRotation = _angleToTarget - rotationParent;
-
-		// Set the rotation step and adjust for movement limit
-		DeltaRotation = new Angle(Math.Sign(targetRotation.InDegrees - RotationDegrees) * TurnRateDegreesPerSecond * (float)delta);
-		if (RotationDegrees + DeltaRotation.InDegrees > MaxRotationDegrees)
-		{
-			DeltaRotation = new Angle(MaxRotationDegrees - RotationDegrees);
-		}
-		else if (RotationDegrees + DeltaRotation.InDegrees < MinRotationDegrees)
-		{
-			DeltaRotation = new Angle(MinRotationDegrees - RotationDegrees);
-		}
+		var newRotation = NavigationManager.GetNewRotation(
+			RotationDegrees,
+			_angleToTarget.InDegrees,
+			TurnRateDegreesPerSecond,
+			MinRotationDegrees,
+			MaxRotationDegrees,
+			delta);
+		DeltaRotation = new Angle(0f);  // TODO: REmove this when it is no longer used in base class
+		RotationDegrees = newRotation;
 	}
 }

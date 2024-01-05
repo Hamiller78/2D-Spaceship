@@ -73,20 +73,11 @@ public partial class ShipBase : Area2D
 		}
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		// Movement
-		var newRotationDegrees = RotationDegrees + DeltaRotation.InDegrees;
-		if (newRotationDegrees < -180f)
-		{
-			newRotationDegrees += 360f;
-		}
-		else if (newRotationDegrees > 180f)
-		{
-			newRotationDegrees -= 360f;
-		}
-		RotationDegrees = newRotationDegrees;
+		var newRotation = new Angle(RotationDegrees) + DeltaRotation;
+		RotationDegrees = newRotation.InDegrees;
 
 		var vx = (float)(_velocity.X + Math.Cos(Rotation) * DeltaVelocity);
 		var vy = (float)(_velocity.Y + Math.Sin(Rotation) * DeltaVelocity);
@@ -142,6 +133,7 @@ public partial class ShipBase : Area2D
 			explosion.Position = GlobalPosition;
 			GetTree().Root.AddChild(explosion);
 			QueueFree();
+			area.QueueFree();
 		}
 	}
 

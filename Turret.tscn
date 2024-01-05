@@ -22,9 +22,8 @@ animations = [{
 [node name="Turret" type="Area2D"]
 script = ExtResource("1_3lyxr")
 FireRange = 600.0
-ViewRange = 800.0
-MinRotationDegrees = -180.0
-MaxRotationDegrees = 180.0
+ViewRange = 10000.0
+MaxRotationDegrees = 90.0
 TurnRateDegreesPerSecond = 120.0
 LaserShotScene = ExtResource("2_wnmvr")
 RechargeTime = 0.5

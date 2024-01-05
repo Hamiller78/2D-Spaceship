@@ -79,8 +79,10 @@ public partial class BossShip : ShipBase
 		var desiredDeltaV = deltaPos.Normalized() * (float)Math.Sqrt(MaxAcceleration * deltaPos.Length());
 		var deltaVDelta = desiredDeltaV - Velocity;
 
-		var rotationDelta = new Angle() { InRadians = deltaVDelta.Angle() - Rotation };
-		if (Math.Abs(rotationDelta.InDegrees) < 60f)
+		var deltaVDeltaAngle = new Angle() { InRadians = deltaVDelta.Angle() }; // minus for y axis downwards
+		var rotationDegreesAngle = new Angle() { InDegrees = RotationDegrees };
+		var rotationDelta = deltaVDeltaAngle - rotationDegreesAngle;
+		if (rotationDelta.InDegrees > 300f || rotationDelta.InDegrees < 60f)
 		{
 			RunEngine(delta);
 		}
@@ -88,7 +90,9 @@ public partial class BossShip : ShipBase
 		{
 			StopEngine();
 		}
-		DeltaRotation.InDegrees = Math.Sign(rotationDelta.InDegrees) * TurnRateDegreesPerSecond * (float)delta;
+		DeltaRotation.InDegrees = rotationDegreesAngle.GetTurnDirection(deltaVDeltaAngle, new Angle(0f), new Angle(360f))
+									* TurnRateDegreesPerSecond
+									* (float)delta;
 	}
 
 	public void OnTargetPositionUpdated(Vector2 position, Vector2 velocity)
@@ -101,16 +105,18 @@ public partial class BossShip : ShipBase
 
 	private void TurnToTarget(double delta)
 	{
-		var rotationDelta = _targetRotation - new Angle(RotationDegrees);
-		var rotationStep = new Angle(TurnRateDegreesPerSecond * (float)delta);
+		var rotationDelta = _targetRotation - new Angle(GlobalRotationDegrees);
+		var rotationStep = TurnRateDegreesPerSecond * (float)delta;
+		var turnDirection = new Angle(GlobalRotationDegrees).GetTurnDirection(_targetRotation, new Angle(0f), new Angle(360f));
+		var deltaRotation = turnDirection * rotationStep;
 
-		if (Math.Abs(rotationDelta.InDegrees) <= rotationStep.InDegrees)
+		if (Math.Abs(rotationDelta.InDegrees) <= rotationStep)
 		{
-			DeltaRotation = rotationDelta;
+			DeltaRotation = _targetRotation;
 		}
 		else
 		{
-			DeltaRotation = new Angle(Math.Sign(rotationDelta.InDegrees) * rotationStep.InDegrees);
+			DeltaRotation = new Angle(deltaRotation);
 		}
 	}
 
@@ -123,5 +129,4 @@ public partial class BossShip : ShipBase
 	{
 		DeltaVelocity = 0f;
 	}
-
 }

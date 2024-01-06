@@ -70,7 +70,7 @@ public partial class Turret : ShipBase
 			MinRotationDegrees,
 			MaxRotationDegrees,
 			delta);
-		DeltaRotation = new Angle(0f);  // TODO: REmove this when it is no longer used in base class
+		DeltaRotation = new Angle(0f);  // TODO: Remove this when it is no longer used in base class
 		RotationDegrees = newRotation;
 	}
 }

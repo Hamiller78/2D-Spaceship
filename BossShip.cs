@@ -64,12 +64,6 @@ public partial class BossShip : ShipBase
 	{
 		StopEngine();
 		TurnToTarget(delta);
-
-		if (Math.Abs((_targetRotation - new Angle(RotationDegrees)).InDegrees) < 45f)
-		{
-			//FirePrimary();
-			StopEngine();
-		}
 	}
 
 	private void PerformApproach(double delta)
@@ -79,8 +73,8 @@ public partial class BossShip : ShipBase
 		var desiredDeltaV = deltaPos.Normalized() * (float)Math.Sqrt(MaxAcceleration * deltaPos.Length());
 		var deltaVDelta = desiredDeltaV - Velocity;
 
-		var deltaVDeltaAngle = new Angle() { InRadians = deltaVDelta.Angle() }; // minus for y axis downwards
-		var rotationDegreesAngle = new Angle() { InDegrees = RotationDegrees };
+		var deltaVDeltaAngle = new Angle() { InRadians = deltaVDelta.Angle() };
+		var rotationDegreesAngle = new Angle(RotationDegrees);
 		var rotationDelta = deltaVDeltaAngle - rotationDegreesAngle;
 		if (rotationDelta.InDegrees > 300f || rotationDelta.InDegrees < 60f)
 		{
@@ -105,19 +99,15 @@ public partial class BossShip : ShipBase
 
 	private void TurnToTarget(double delta)
 	{
-		var rotationDelta = _targetRotation - new Angle(GlobalRotationDegrees);
-		var rotationStep = TurnRateDegreesPerSecond * (float)delta;
-		var turnDirection = new Angle(GlobalRotationDegrees).GetTurnDirection(_targetRotation, new Angle(0f), new Angle(360f));
-		var deltaRotation = turnDirection * rotationStep;
-
-		if (Math.Abs(rotationDelta.InDegrees) <= rotationStep)
-		{
-			DeltaRotation = _targetRotation;
-		}
-		else
-		{
-			DeltaRotation = new Angle(deltaRotation);
-		}
+		var newRotation = NavigationManager.GetNewRotation(
+			RotationDegrees,
+			_targetRotation.InDegrees,
+			TurnRateDegreesPerSecond,
+			0f,
+			360f,
+			delta);
+		DeltaRotation = new Angle(0f);  // TODO: Remove this when it is no longer used in base class
+		RotationDegrees = newRotation;
 	}
 
 	private void RunEngine(double delta)

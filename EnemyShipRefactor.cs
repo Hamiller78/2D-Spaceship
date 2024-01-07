@@ -69,7 +69,6 @@ public partial class EnemyShipRefactor : ShipBase
 		if (Math.Abs((_targetRotation - new Angle(RotationDegrees)).InDegrees) < 45f)
 		{
 			FirePrimary();
-			StopEngine();
 		}
 	}
 
@@ -80,8 +79,10 @@ public partial class EnemyShipRefactor : ShipBase
 		var desiredDeltaV = deltaPos.Normalized() * (float)Math.Sqrt(MaxAcceleration * deltaPos.Length());
 		var deltaVDelta = desiredDeltaV - Velocity;
 
-		var rotationDelta = new Angle() { InRadians = deltaVDelta.Angle() - Rotation };
-		if (Math.Abs(rotationDelta.InDegrees) < 60f)
+		var deltaVDeltaAngle = new Angle() { InRadians = deltaVDelta.Angle() };
+		var rotationDegreesAngle = new Angle(RotationDegrees);
+		var rotationDelta = deltaVDeltaAngle - rotationDegreesAngle;
+		if (rotationDelta.InDegrees > 300f || rotationDelta.InDegrees < 60f)
 		{
 			RunEngine(delta);
 		}
@@ -89,7 +90,9 @@ public partial class EnemyShipRefactor : ShipBase
 		{
 			StopEngine();
 		}
-		DeltaRotation.InDegrees = Math.Sign(rotationDelta.InDegrees) * TurnRateDegreesPerSecond * (float)delta;
+		DeltaRotation.InDegrees = rotationDegreesAngle.GetTurnDirection(deltaVDeltaAngle, new Angle(0f), new Angle(360f))
+									* TurnRateDegreesPerSecond
+									* (float)delta;
 	}
 
 	public void OnTargetPositionUpdated(Vector2 position, Vector2 velocity)
@@ -101,17 +104,15 @@ public partial class EnemyShipRefactor : ShipBase
 
 	private void TurnToTarget(double delta)
 	{
-		var rotationDelta = _targetRotation - new Angle(RotationDegrees);
-		var rotationStep = new Angle(TurnRateDegreesPerSecond * (float)delta);
-
-		if (Math.Abs(rotationDelta.InDegrees) <= rotationStep.InDegrees)
-		{
-			DeltaRotation = rotationDelta;
-		}
-		else
-		{
-			DeltaRotation = new Angle(Math.Sign(rotationDelta.InDegrees) * rotationStep.InDegrees);
-		}
+		var newRotation = NavigationManager.GetNewRotation(
+			RotationDegrees,
+			_targetRotation.InDegrees,
+			TurnRateDegreesPerSecond,
+			0f,
+			360f,
+			delta);
+		DeltaRotation = new Angle(0f);  // TODO: Remove this when it is no longer used in base class
+		RotationDegrees = newRotation;
 	}
 
 	private void RunEngine(double delta)
